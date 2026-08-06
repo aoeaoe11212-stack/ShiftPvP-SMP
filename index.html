@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftPvP SMP — Season 0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#08080d;
+    --void-2:#0e0e16;
+    --void-3:#16161f;
+    --line:rgba(255,255,255,.09);
+    --line-soft:rgba(255,255,255,.05);
+    --hi:#f2f2f7;
+    --lo:#9494ab;
+    --dim:#55556b;
+    --cyan:#00e5ff;
+    --magenta:#ff2e6e;
+    --bronze:#c9895a;
+    --silver:#c7ccd8;
+    --gold:#f5b700;
+    --diamond:#4fe0f2;
+    --immortal-a:#b565ff;
+    --immortal-b:#ff2e6e;
+    --immortal-c:#00e5ff;
+    --font-d:'Unbounded',sans-serif;
+    --font-b:'Hanken Grotesk',sans-serif;
+    --font-m:'JetBrains Mono',monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--void);
+    color:var(--hi);
+    font-family:var(--font-b);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:42px 42px;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+
+  ::selection{background:var(--magenta);color:var(--void);}
+
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(8,8,13,.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;
+  }
+  .brand{
+    font-family:var(--font-d);
+    font-weight:800;
+    font-size:16px;
+    letter-spacing:.04em;
+  }
+  .brand span{color:var(--magenta);}
+  .nav-links{display:flex;align-items:center;gap:32px;}
+  .nav-links a{
+    font-size:13px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--lo);
+    transition:color .2s;
+  }
+  .nav-links a:hover{color:var(--hi);}
+  .nav-cta{
+    font-family:var(--font-m);
+    font-size:12px;font-weight:600;letter-spacing:.04em;
+    background:var(--hi);color:var(--void);
+    padding:9px 18px;border-radius:3px;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 0 0 1px var(--cyan), 0 8px 24px -8px var(--cyan);}
+
+  /* ---------- GLITCH TEXT ---------- */
+  .glitch{position:relative;display:inline-block;}
+  .glitch::before,.glitch::after{
+    content:attr(data-text);
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    background:inherit;
+  }
+  .glitch::before{
+    color:var(--cyan);
+    clip-path:inset(0 0 100% 0);
+    transform:translate(0,0);
+    animation:glitchTop 6s infinite steps(1);
+    mix-blend-mode:screen;
+  }
+  .glitch::after{
+    color:var(--magenta);
+    clip-path:inset(100% 0 0 0);
+    transform:translate(0,0);
+    animation:glitchBottom 6s infinite steps(1);
+    mix-blend-mode:screen;
+  }
+  @keyframes glitchTop{
+    0%,91%,100%{clip-path:inset(0 0 100% 0);transform:translate(0,0);opacity:0;}
+    92%{clip-path:inset(10% 0 62% 0);transform:translate(-4px,-2px);opacity:.9;}
+    94%{clip-path:inset(38% 0 24% 0);transform:translate(3px,1px);opacity:.85;}
+    96%{clip-path:inset(4% 0 80% 0);transform:translate(-2px,0);opacity:.7;}
+    98%{clip-path:inset(0 0 100% 0);transform:translate(0,0);opacity:0;}
+  }
+  @keyframes glitchBottom{
+    0%,91%,100%{clip-path:inset(100% 0 0 0);transform:translate(0,0);opacity:0;}
+    92%{clip-path:inset(58% 0 8% 0);transform:translate(4px,2px);opacity:.9;}
+    94%{clip-path:inset(70% 0 3% 0);transform:translate(-3px,-1px);opacity:.85;}
+    96%{clip-path:inset(30% 0 45% 0);transform:translate(2px,0);opacity:.7;}
+    98%{clip-path:inset(100% 0 0 0);transform:translate(0,0);opacity:0;}
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    padding:120px 0 60px;
+  }
+  .hero-glow{
+    position:absolute;top:-10%;left:50%;transform:translateX(-50%);
+    width:900px;height:600px;
+    background:radial-gradient(ellipse at center, rgba(255,46,110,.16), rgba(0,229,255,.08) 45%, transparent 70%);
+    filter:blur(40px);pointer-events:none;z-index:0;
+  }
+  .hero-inner{position:relative;z-index:1;}
+  .eyebrow{
+    font-family:var(--font-m);
+    font-size:12px;font-weight:500;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--lo);
+    display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:'';width:7px;height:7px;border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 10px var(--cyan);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+  h1.title{
+    font-family:var(--font-d);
+    font-weight:900;
+    font-size:clamp(52px,10vw,124px);
+    line-height:.92;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    margin-bottom:26px;
+  }
+  .hero p.lede{
+    font-size:clamp(16px,2vw,19px);
+    color:var(--lo);
+    max-width:520px;
+    margin-bottom:40px;
+  }
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:56px;}
+  .btn{
+    font-family:var(--font-b);
+    font-weight:700;font-size:14.5px;
+    padding:15px 26px;border-radius:3px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .15s, box-shadow .15s, background .15s;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--hi);color:var(--void);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px -10px rgba(255,255,255,.35);}
+  .btn-ghost{border-color:var(--line);color:var(--hi);}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px);}
+
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:0;
+    border:1px solid var(--line);border-radius:6px;
+    overflow:hidden;max-width:640px;
+  }
+  .hero-meta > div{
+    flex:1;min-width:150px;
+    padding:18px 22px;
+    border-right:1px solid var(--line);
+  }
+  .hero-meta > div:last-child{border-right:none;}
+  .hero-meta .label{
+    font-family:var(--font-m);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+  }
+  .hero-meta .value{
+    font-family:var(--font-m);font-size:20px;font-weight:600;color:var(--hi);
+  }
+  .hero-meta .value.countdown{color:var(--magenta);}
+  .hero-meta .value.lock{color:var(--cyan);font-size:15px;}
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:120px 0;position:relative;border-top:1px solid var(--line-soft);}
+  .section-head{max-width:640px;margin-bottom:64px;}
+  .section-head .eyebrow{margin-bottom:18px;}
+  .section-head h2{
+    font-family:var(--font-d);
+    font-weight:800;
+    font-size:clamp(30px,4.5vw,48px);
+    line-height:1.08;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .section-head p{color:var(--lo);font-size:16px;max-width:520px;}
+
+  /* ---------- SIGNAL / MYSTERY ---------- */
+  .signal-log{
+    background:var(--void-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:32px 36px;
+    font-family:var(--font-m);
+    font-size:14px;
+    color:var(--lo);
+    display:flex;flex-direction:column;gap:14px;
+    position:relative;
+    overflow:hidden;
+  }
+  .signal-log::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent, rgba(0,229,255,.03), transparent);
+    animation:scan 5s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes scan{0%{transform:translateY(-100%);}100%{transform:translateY(100%);}}
+  .signal-log .line{display:flex;gap:14px;}
+  .signal-log .tag{color:var(--dim);flex-shrink:0;}
+  .signal-log .hi{color:var(--cyan);}
+  .signal-log .mg{color:var(--magenta);}
+  .signal-log .white{color:var(--hi);}
+
+  /* ---------- INVITE CONTEST ---------- */
+  .prize-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:36px;
+  }
+  .prize-card{
+    background:var(--void-2);
+    padding:34px 26px;
+    display:flex;flex-direction:column;gap:16px;
+    position:relative;
+  }
+  .prize-card .place{
+    font-family:var(--font-m);
+    font-size:12px;font-weight:600;letter-spacing:.1em;
+    color:var(--dim);text-transform:uppercase;
+  }
+  .prize-card .place b{
+    display:block;font-family:var(--font-d);font-size:34px;color:var(--hi);
+    font-weight:800;margin-top:6px;letter-spacing:0;
+  }
+  .prize-card:nth-child(1) .place b{color:var(--cyan);}
+  .prize-card:nth-child(2) .place b{color:var(--hi);}
+  .prize-card:nth-child(1){box-shadow:inset 0 3px 0 var(--cyan);}
+  .prize-card .reward{font-size:15px;font-weight:600;color:var(--hi);line-height:1.35;}
+  .prize-card .invites{
+    margin-top:auto;
+    font-family:var(--font-m);
+    font-size:12px;color:var(--lo);
+    border-top:1px solid var(--line-soft);
+    padding-top:14px;
+  }
+  .prize-card .invites b{color:var(--magenta);}
+
+  .rules-box{
+    display:grid;grid-template-columns:1fr 1fr;gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .rules-box .rule{background:var(--void-2);padding:26px 28px;}
+  .rules-box .rule h4{
+    font-family:var(--font-m);font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--magenta);margin-bottom:10px;
+  }
+  .rules-box .rule p{font-size:14px;color:var(--lo);}
+
+  /* ---------- RANKS ---------- */
+  .rank-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:16px;
+  }
+  .rank-card{
+    background:var(--void-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 22px 24px;
+    display:flex;flex-direction:column;
+    transition:transform .2s, border-color .2s;
+  }
+  .rank-card:hover{transform:translateY(-6px);}
+  .rank-card .swatch{
+    width:32px;height:32px;border-radius:6px;margin-bottom:18px;
+  }
+  .rank-card .name{
+    font-family:var(--font-d);font-weight:800;font-size:19px;
+    text-transform:uppercase;margin-bottom:4px;letter-spacing:.01em;
+  }
+  .rank-card .price{
+    font-family:var(--font-m);font-size:22px;font-weight:700;
+    color:var(--hi);margin-bottom:20px;
+  }
+  .rank-card .price span{font-size:12px;color:var(--dim);font-weight:500;}
+  .rank-card ul{display:flex;flex-direction:column;gap:9px;margin-bottom:24px;flex:1;}
+  .rank-card li{
+    font-size:13px;color:var(--lo);
+    padding-left:16px;position:relative;line-height:1.4;
+  }
+  .rank-card li::before{
+    content:'▸';position:absolute;left:0;top:0;
+    font-size:11px;
+  }
+  .rank-buy{
+    font-family:var(--font-m);font-size:12px;font-weight:600;letter-spacing:.05em;
+    text-align:center;padding:11px;border-radius:4px;
+    border:1px solid var(--line);color:var(--hi);
+    text-transform:uppercase;transition:all .2s;
+  }
+
+  .rank-bronze .swatch{background:var(--bronze);}
+  .rank-bronze .price{color:var(--bronze);}
+  .rank-bronze:hover{border-color:var(--bronze);}
+  .rank-bronze .rank-buy:hover{background:var(--bronze);border-color:var(--bronze);color:var(--void);}
+
+  .rank-silver .swatch{background:var(--silver);}
+  .rank-silver .price{color:var(--silver);}
+  .rank-silver:hover{border-color:var(--silver);}
+  .rank-silver .rank-buy:hover{background:var(--silver);border-color:var(--silver);color:var(--void);}
+
+  .rank-gold .swatch{background:var(--gold);}
+  .rank-gold .price{color:var(--gold);}
+  .rank-gold:hover{border-color:var(--gold);}
+  .rank-gold .rank-buy:hover{background:var(--gold);border-color:var(--gold);color:var(--void);}
+
+  .rank-diamond .swatch{background:var(--diamond);}
+  .rank-diamond .price{color:var(--diamond);}
+  .rank-diamond:hover{border-color:var(--diamond);}
+  .rank-diamond .rank-buy:hover{background:var(--diamond);border-color:var(--diamond);color:var(--void);}
+
+  .rank-immortal{
+    border-color:rgba(255,255,255,.18);
+    background:linear-gradient(180deg, var(--void-3), var(--void-2));
+    position:relative;
+  }
+  .rank-immortal::before{
+    content:'';position:absolute;inset:-1px;border-radius:10px;
+    padding:1px;
+    background:linear-gradient(135deg,var(--immortal-a),var(--immortal-b),var(--immortal-c));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    pointer-events:none;
+  }
+  .rank-immortal .swatch{background:linear-gradient(135deg,var(--immortal-a),var(--immortal-b),var(--immortal-c));}
+  .rank-immortal .price{
+    background:linear-gradient(135deg,var(--immortal-a),var(--immortal-b),var(--immortal-c));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .rank-immortal .tag{
+    position:absolute;top:-11px;right:20px;
+    font-family:var(--font-m);font-size:10px;font-weight:700;letter-spacing:.08em;
+    background:var(--magenta);color:var(--void);padding:4px 9px;border-radius:3px;
+    text-transform:uppercase;
+  }
+  .rank-immortal .rank-buy{border-color:var(--immortal-c);color:var(--immortal-c);}
+  .rank-immortal .rank-buy:hover{
+    background:linear-gradient(135deg,var(--immortal-a),var(--immortal-b),var(--immortal-c));
+    border-color:transparent;color:var(--void);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:56px 0 44px;border-top:1px solid var(--line-soft);}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px;}
+  footer .brand{font-size:14px;}
+  footer .fine{font-family:var(--font-m);font-size:11.5px;color:var(--dim);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:980px){
+    .rank-grid{grid-template-columns:repeat(2,1fr);}
+    .prize-grid{grid-template-columns:repeat(2,1fr);}
+    .rules-box{grid-template-columns:1fr;}
+  }
+  @media (max-width:640px){
+    .nav-links a:not(.nav-cta){display:none;}
+    .rank-grid{grid-template-columns:1fr;}
+    .prize-grid{grid-template-columns:1fr;}
+    .hero-meta > div{border-right:none;border-bottom:1px solid var(--line);}
+    .hero-meta > div:last-child{border-bottom:none;}
+    section{padding:80px 0;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">SHIFT<span>PVP</span></div>
+    <div class="nav-links">
+      <a href="#signal">The Signal</a>
+      <a href="#invites">Invites</a>
+      <a href="#ranks">Ranks</a>
+      <a href="https://discord.gg/yRJQq985K3" class="nav-cta" target="_blank" rel="noopener noreferrer">Join Discord</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-glow"></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">Season 0 — reveal in progress</div>
+    <h1 class="title glitch" data-text="SHIFTPVP">SHIFTPVP</h1>
+    <p class="lede">A survival SMP that hasn't shown its hand yet. Invite rewards are live, the rank shop is open, and the server officially launches when the community hits 200 members.</p>
+    <div class="hero-actions">
+      <a href="#invites" class="btn btn-primary">Enter the invite contest</a>
+      <a href="#ranks" class="btn btn-ghost">See the rank shop</a>
+    </div>
+    <div class="hero-meta">
+      <div>
+        <div class="label">Server launches at</div>
+        <div class="value lock">🔒 200 members</div>
+      </div>
+      <div>
+        <div class="label">Invite contest closes</div>
+        <div class="value countdown" id="countdown">—</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="signal">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Transmission</div>
+      <h2>The mystery is<br>unfolding slowly.</h2>
+      <p>Here's everything that's confirmed so far. More gets decrypted as the member count climbs.</p>
+    </div>
+    <div class="signal-log">
+      <div class="line"><span class="tag">[CONFIRMED]</span><span class="white">Invite rewards are officially live.</span></div>
+      <div class="line"><span class="tag">[LOCKED]</span><span class="hi">Server launches at 200 members.</span></div>
+      <div class="line"><span class="tag">[ACTIVE]</span><span class="mg">Invite contest running now through 20 August 2026.</span></div>
+      <div class="line"><span class="tag">[OPEN]</span><span class="white">Rank shop is live — buy in before the server officially launches.</span></div>
+      <div class="line"><span class="tag">[STATUS]</span><span class="lo">Awaiting 200 members to initiate server launch.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="invites">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Invite contest — live now</div>
+      <h2>Bring people in.<br>Take the top rank.</h2>
+      <p>Permanent, server-wide rewards for the top four inviters. Every placement has a minimum invite count you need to hit to actually claim it.</p>
+    </div>
+
+    <div class="prize-grid">
+      <div class="prize-card">
+        <div class="place">Placement<b>1ST</b></div>
+        <div class="reward">Permanent Highest Rank</div>
+        <div class="invites">Min. <b>50</b> invites</div>
+      </div>
+      <div class="prize-card">
+        <div class="place">Placement<b>2ND</b></div>
+        <div class="reward">Permanent Second Highest Rank</div>
+        <div class="invites">Min. <b>30</b> invites</div>
+      </div>
+      <div class="prize-card">
+        <div class="place">Placement<b>3RD</b></div>
+        <div class="reward">Permanent Third Highest Rank</div>
+        <div class="invites">Min. <b>20</b> invites</div>
+      </div>
+      <div class="prize-card">
+        <div class="place">Placement<b>4TH</b></div>
+        <div class="reward">Permanent Lowest Rank</div>
+        <div class="invites">Min. <b>15</b> invites</div>
+      </div>
+    </div>
+
+    <div class="rules-box">
+      <div class="rule">
+        <h4>No cheating</h4>
+        <p>Fake accounts, bots, or leave-and-rejoin invites are automatically detected and result in disqualification.</p>
+      </div>
+      <div class="rule">
+        <h4>Milestones</h4>
+        <p>You must hit the minimum invite requirement for a placement to claim that placement's prize.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ranks">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Rank shop — buy before launch</div>
+      <h2>Five tiers.<br>One server.</h2>
+      <p>Grab a rank now, while the server's still being built — before ShiftPvP officially goes live.</p>
+    </div>
+
+    <div class="rank-grid">
+      <div class="rank-card rank-bronze">
+        <div class="swatch"></div>
+        <div class="name">Bronze</div>
+        <div class="price">$2.99</div>
+        <ul>
+          <li>Bronze prefix</li>
+          <li>Colored nickname</li>
+          <li>/hat /craft /workbench</li>
+          <li>2 Homes</li>
+          <li>Priority Join (Level 1)</li>
+          <li>Join message</li>
+          <li>Bronze Discord role</li>
+        </ul>
+        <a href="#" class="rank-buy">Buy Bronze</a>
+      </div>
+
+      <div class="rank-card rank-silver">
+        <div class="swatch"></div>
+        <div class="name">Silver</div>
+        <div class="price">$5.99</div>
+        <ul>
+          <li>Silver prefix</li>
+          <li>/enderchest /recipe</li>
+          <li>3 Homes</li>
+          <li>Nickname (/nick)</li>
+          <li>More chat colors</li>
+          <li>More cosmetics</li>
+          <li>Priority Join (Level 2)</li>
+          <li>Silver Discord role</li>
+        </ul>
+        <a href="#" class="rank-buy">Buy Silver</a>
+      </div>
+
+      <div class="rank-card rank-gold">
+        <div class="swatch"></div>
+        <div class="name">Gold</div>
+        <div class="price">$11.99</div>
+        <ul>
+          <li>Gold prefix</li>
+          <li>/anvil /smithingtable /stonecutter</li>
+          <li>4 Homes</li>
+          <li>Gradient nickname</li>
+          <li>Chat tags</li>
+          <li>Custom death message</li>
+          <li>Chat color access</li>
+          <li>Gold Discord role</li>
+        </ul>
+        <a href="#" class="rank-buy">Buy Gold</a>
+      </div>
+
+      <div class="rank-card rank-diamond">
+        <div class="swatch"></div>
+        <div class="name">Diamond</div>
+        <div class="price">$17.99</div>
+        <ul>
+          <li>Diamond prefix</li>
+          <li>/grindstone /loom /cartographytable</li>
+          <li>5 Homes</li>
+          <li>Priority Join (Level 3)</li>
+          <li>Diamond Discord role</li>
+        </ul>
+        <a href="#" class="rank-buy">Buy Diamond</a>
+      </div>
+
+      <div class="rank-card rank-immortal">
+        <div class="tag">Highest rank</div>
+        <div class="swatch"></div>
+        <div class="name">Immortal</div>
+        <div class="price">$29.99</div>
+        <ul>
+          <li>Animated Immortal prefix</li>
+          <li>6 Homes</li>
+          <li>/feed (30-minute cooldown)</li>
+          <li>Unlimited nickname colors</li>
+          <li>Unlimited gradients</li>
+          <li>Exclusive kill effects</li>
+          <li>Highest priority queue</li>
+          <li>Immortal Discord role</li>
+        </ul>
+        <a href="#" class="rank-buy">Buy Immortal</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">SHIFT<span>PVP</span> SMP</div>
+    <div class="fine">SEASON 0 · SIGNAL UNCONFIRMED</div>
+  </div>
+</footer>
+
+<script>
+  // Countdown to invite contest deadline — 20 August 2026
+  const deadline = new Date('2026-08-20T23:59:59');
+  const el = document.getElementById('countdown');
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function tick(){
+    const now = new Date();
+    let diff = deadline - now;
+    if (diff <= 0){
+      el.textContent = 'Closed';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff / 3600000) % 24);
+    const m = Math.floor((diff / 60000) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+    el.textContent = d + 'd ' + pad(h) + 'h ' + pad(m) + 'm ' + pad(s) + 's';
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+
+</body>
+</html>
