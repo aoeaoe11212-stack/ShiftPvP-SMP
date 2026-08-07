@@ -267,8 +267,8 @@
     display:flex;align-items:center;justify-content:space-between;
     gap:40px;
   }
-  .hero-copy{flex:1 1 auto; max-width: 600px; position: relative; z-index: 2;}
-  .hero-clip{flex:0 1 440px; position: relative; z-index: 1;}
+  .hero-copy{flex:1 1 auto; max-width: 540px; position: relative; z-index: 2;}
+  .hero-clip{flex:0 1 480px; position: relative; z-index: 1; margin-top: 40px;}
   
   .eyebrow{
     font-family:var(--font-m);
@@ -287,7 +287,7 @@
   h1.title{
     font-family:var(--font-d);
     font-weight:900;
-    font-size:clamp(52px,10vw,114px);
+    font-size:clamp(46px,8.5vw,96px);
     line-height:.92;
     letter-spacing:-.01em;
     text-transform:uppercase;
@@ -410,7 +410,7 @@
   .signal-log .mg{color:var(--magenta);}
   .signal-log .white{color:var(--hi);}
 
-  /* ---------- UNLOCK ANIMATION ---------- */
+  /* ---------- UNLOCK ANIMATION & CLICK EFFECT ---------- */
   .unlock-wrapper {
     margin-top: 32px;
     display: flex;
@@ -422,12 +422,35 @@
     background: rgba(0, 229, 255, 0.1);
     color: var(--cyan);
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.1s ease, background 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
   }
   #unlockBtn:hover {
     background: var(--cyan);
     color: var(--void);
     box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
   }
+  #unlockBtn:active {
+    transform: scale(0.95);
+  }
+
+  /* Click ripple effect styling */
+  .btn-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: rippleEffect 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes rippleEffect {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
   .unlocked-intel {
     width: 100%;
     max-height: 0;
@@ -437,7 +460,7 @@
     transition: max-height 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease, margin-top 0.4s ease;
   }
   .unlocked-intel.is-revealed {
-    max-height: 500px; /* arbitrary large max-height for animation */
+    max-height: 500px;
     opacity: 1;
     margin-top: 24px;
     animation: decrypt-flash 0.6s ease-out;
@@ -605,7 +628,7 @@
   @media (max-width:1120px){
     .hero-inner{flex-direction:column;align-items:flex-start;gap:40px;}
     .hero-copy {max-width: 100%;}
-    .hero-clip {width: 100%; max-width: 640px; margin-right: 0;}
+    .hero-clip {width: 100%; max-width: 640px; margin-right: 0; margin-top: 20px;}
   }
   @media (max-width:980px){
     .rank-grid{grid-template-columns:repeat(2,1fr);}
@@ -707,23 +730,23 @@
       <div class="line"><span class="tag">[STATUS]</span><span class="lo">Awaiting 200 members to initiate server launch.</span></div>
     </div>
     
-    <!-- NEW UNLOCK BUTTON & CONTENT START -->
+    <!-- UNLOCK BUTTON & UPDATED INTEL START -->
     <div class="unlock-wrapper reveal delay-2">
       <button id="unlockBtn" class="btn">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        DECRYPT CLASSIFIED INTEL
+        JUST UPDATED
       </button>
       
       <div id="unlockedIntel" class="unlocked-intel">
         <div class="signal-log">
-          <div class="line"><span class="tag">[DECRYPTED]</span><span class="white">Server Version: <strong>1.21.11+</strong></span></div>
-          <div class="line"><span class="tag">[DECRYPTED]</span><span class="hi">End Dimension: <strong>UNLOCKED</strong> (Open for exploration)</span></div>
-          <div class="line"><span class="tag">[URGENT]</span><span class="mg">Recruiting: <strong>Content Creators & Staff</strong> (Open a ticket in Discord to apply)</span></div>
-          <div class="line"><span class="tag">[DECRYPTED]</span><span class="lo">World Border: Expanding dynamically with player milestones.</span></div>
+          <div class="line"><span class="tag">[UPDATED 07/08/2026]</span><span class="white">Server Version: <strong>1.21.11+</strong></span></div>
+          <div class="line"><span class="tag">[UPDATED 07/08/2026]</span><span class="hi">End Dimension: <strong>UNLOCKED</strong> (Open for exploration)</span></div>
+          <div class="line"><span class="tag">[URGENT]</span><span class="mg">Recruiting: <strong>Content Creators & Staff</strong> (Applications open in Discord)</span></div>
+          <div class="line"><span class="tag">[UPDATED 07/08/2026]</span><span class="lo">World Border: Expanding dynamically with player milestones.</span></div>
         </div>
       </div>
     </div>
-    <!-- NEW UNLOCK BUTTON & CONTENT END -->
+    <!-- UNLOCK BUTTON & UPDATED INTEL END -->
     
   </div>
 </section>
@@ -910,19 +933,31 @@
     }
   })();
 
-  // ---------- UNLOCK INTEL ANIMATION LOGIC ---------- //
+  // ---------- BUTTON CLICK RIPPLE EFFECT & UNLOCK LOGIC ---------- //
   (function(){
     const unlockBtn = document.getElementById('unlockBtn');
     const unlockedIntel = document.getElementById('unlockedIntel');
 
     if (unlockBtn && unlockedIntel) {
-      unlockBtn.addEventListener('click', () => {
+      unlockBtn.addEventListener('click', function(e) {
+        // Create click ripple effect
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.classList.add('btn-ripple');
+        
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+        
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+
         if (!unlockedIntel.classList.contains('is-revealed')) {
           unlockedIntel.classList.add('is-revealed');
           
-          // Update button styling to indicate unlocked status
-          unlockBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> INTEL DECRYPTED';
-          unlockBtn.style.pointerEvents = 'none'; // Lock button
+          unlockBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> UPDATES UNLOCKED';
+          unlockBtn.style.pointerEvents = 'none';
           unlockBtn.style.background = 'transparent';
           unlockBtn.style.borderColor = 'var(--line)';
           unlockBtn.style.color = 'var(--lo)';
@@ -974,12 +1009,24 @@
   tick();
   setInterval(tick, 1000);
 
-  // ---------- SCROLL SHIFT (VELOCITY) ---------- //
+  // ---------- SMOOTH WHEEL SCROLL & VELOCITY SHIFT ---------- //
   (function(){
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const shiftEl = document.getElementById('scroll-shift');
-    if (reduceMotion || !shiftEl) return;
+    if (reduceMotion) return;
 
+    // Smooth Mouse Wheel Inertia Scroller
+    let targetScrollY = window.scrollY;
+    let currentScrollY = window.scrollY;
+
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      targetScrollY += e.deltaY * 0.8; // Adjust multiplier for scroll speed if needed
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      targetScrollY = Math.max(0, Math.min(targetScrollY, maxScroll));
+    }, { passive: false });
+
+    // Velocity Shift Animation & Smooth Scroll Loop
     const body = document.body;
     let lastY = window.scrollY;
     let lastT = performance.now();
@@ -988,7 +1035,16 @@
     let displayBlur = 0;
     let surgeTimeout;
 
-    function onScroll(){
+    function raf(){
+      // Smooth lerp scrolling position
+      currentScrollY += (targetScrollY - currentScrollY) * 0.1;
+      if (Math.abs(targetScrollY - currentScrollY) > 0.5) {
+        window.scrollTo(0, currentScrollY);
+      } else {
+        targetScrollY = window.scrollY; // sync back up if user scrolled natively
+        currentScrollY = window.scrollY;
+      }
+
       const now = performance.now();
       const y = window.scrollY;
       const dt = Math.max(now - lastT, 1);
@@ -1002,18 +1058,17 @@
         clearTimeout(surgeTimeout);
         surgeTimeout = setTimeout(() => body.classList.remove('signal-surge'), 260);
       }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
 
-    function raf(){
-      const targetSkew = Math.max(-5, Math.min(5, velocity * 0.55));
-      const targetBlur = Math.min(3.2, Math.abs(velocity) * 0.18);
-      displaySkew += (targetSkew - displaySkew) * 0.12;
-      displayBlur += (targetBlur - displayBlur) * 0.12;
-      velocity *= 0.9;
+      if (shiftEl) {
+        const targetSkew = Math.max(-5, Math.min(5, velocity * 0.55));
+        const targetBlur = Math.min(3.2, Math.abs(velocity) * 0.18);
+        displaySkew += (targetSkew - displaySkew) * 0.12;
+        displayBlur += (targetBlur - displayBlur) * 0.12;
+        velocity *= 0.9;
 
-      shiftEl.style.transform = 'skewY(' + displaySkew.toFixed(2) + 'deg)';
-      shiftEl.style.filter = displayBlur > 0.03 ? 'blur(' + displayBlur.toFixed(2) + 'px)' : 'none';
+        shiftEl.style.transform = 'skewY(' + displaySkew.toFixed(2) + 'deg)';
+        shiftEl.style.filter = displayBlur > 0.03 ? 'blur(' + displayBlur.toFixed(2) + 'px)' : 'none';
+      }
 
       requestAnimationFrame(raf);
     }
