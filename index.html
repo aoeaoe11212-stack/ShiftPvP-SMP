@@ -46,6 +46,7 @@
       linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
     background-size:42px 42px;
+    background-attachment:fixed;
   }
 
   a{color:inherit;text-decoration:none;}
@@ -56,6 +57,72 @@
   :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
 
   .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- AMBIENT BACKGROUND ---------- */
+  .bg-layer{
+    position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  }
+  .bg-blob{
+    position:absolute;border-radius:50%;filter:blur(100px);
+    transition:opacity .4s ease;
+  }
+  .bg-blob-a{
+    width:560px;height:560px;top:-14%;left:-10%;
+    background:var(--magenta);opacity:.16;
+    animation:driftA 24s ease-in-out infinite alternate;
+  }
+  .bg-blob-b{
+    width:620px;height:620px;bottom:-18%;right:-12%;
+    background:var(--cyan);opacity:.12;
+    animation:driftB 30s ease-in-out infinite alternate;
+  }
+  .bg-blob-c{
+    width:420px;height:420px;top:38%;left:40%;
+    background:var(--immortal-a);opacity:.07;
+    animation:driftC 36s ease-in-out infinite alternate;
+  }
+  @keyframes driftA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(70px,90px) scale(1.08);}}
+  @keyframes driftB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-80px,-60px) scale(1.05);}}
+  @keyframes driftC{0%{transform:translate(0,0);}100%{transform:translate(-50px,40px);}}
+
+  .bg-noise{
+    position:absolute;inset:-50%;width:200%;height:200%;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat:repeat;
+    background-size:140px 140px;
+    opacity:.035;
+    mix-blend-mode:overlay;
+    animation:noiseShift 1s steps(6) infinite;
+    transition:opacity .3s ease;
+  }
+  @keyframes noiseShift{
+    0%{transform:translate(0,0);}
+    20%{transform:translate(-3%,2%);}
+    40%{transform:translate(2%,-4%);}
+    60%{transform:translate(-4%,-2%);}
+    80%{transform:translate(3%,4%);}
+    100%{transform:translate(0,0);}
+  }
+
+  .bg-scan{
+    position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 3px);
+    opacity:.4;
+  }
+
+  .bg-vignette{
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 30%, transparent 40%, rgba(8,8,13,.75) 100%);
+  }
+
+  body.signal-surge .bg-noise{opacity:.09;}
+  body.signal-surge .bg-blob{opacity:.28;}
+
+  /* ---------- SCROLL SHIFT WRAPPER ---------- */
+  #scroll-shift{
+    transform-origin:50% 0%;
+    will-change:transform, filter;
+  }
 
   /* ---------- NAV ---------- */
   nav{
@@ -188,6 +255,8 @@
     display:flex;flex-wrap:wrap;gap:0;
     border:1px solid var(--line);border-radius:6px;
     overflow:hidden;max-width:640px;
+    background:rgba(14,14,22,.5);
+    backdrop-filter:blur(6px);
   }
   .hero-meta > div{
     flex:1;min-width:150px;
@@ -221,7 +290,8 @@
 
   /* ---------- SIGNAL / MYSTERY ---------- */
   .signal-log{
-    background:var(--void-2);
+    background:rgba(14,14,22,.65);
+    backdrop-filter:blur(6px);
     border:1px solid var(--line);
     border-radius:8px;
     padding:32px 36px;
@@ -416,6 +486,15 @@
 </head>
 <body>
 
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-blob bg-blob-a"></div>
+  <div class="bg-blob bg-blob-b"></div>
+  <div class="bg-blob bg-blob-c"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-scan"></div>
+  <div class="bg-vignette"></div>
+</div>
+
 <nav>
   <div class="wrap">
     <div class="brand">SHIFT<span>PVP</span></div>
@@ -423,10 +502,12 @@
       <a href="#signal">The Signal</a>
       <a href="#invites">Invites</a>
       <a href="#ranks">Ranks</a>
-      <a href="https://discord.gg/TcEu6Tc2u2" class="nav-cta" target="_blank" rel="noopener noreferrer">Join Discord</a>
+      <a href="https://discord.gg/yRJQq985K3" target="_blank" rel="noopener noreferrer" class="nav-cta">Join Discord</a>
     </div>
   </div>
 </nav>
+
+<div id="scroll-shift">
 
 <header class="hero" id="top">
   <div class="hero-glow"></div>
@@ -613,6 +694,8 @@
   </div>
 </footer>
 
+</div><!-- /#scroll-shift -->
+
 <script>
   // Countdown to invite contest deadline — 20 August 2026
   const deadline = new Date('2026-08-20T23:59:59');
@@ -635,6 +718,52 @@
   }
   tick();
   setInterval(tick, 1000);
+
+  // Scroll velocity — page subtly shifts (skew + blur) based on how fast you scroll
+  (function(){
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shiftEl = document.getElementById('scroll-shift');
+    if (reduceMotion || !shiftEl) return;
+
+    const body = document.body;
+    let lastY = window.scrollY;
+    let lastT = performance.now();
+    let velocity = 0;
+    let displaySkew = 0;
+    let displayBlur = 0;
+    let surgeTimeout;
+
+    function onScroll(){
+      const now = performance.now();
+      const y = window.scrollY;
+      const dt = Math.max(now - lastT, 1);
+      const dy = y - lastY;
+      velocity = (dy / dt) * 16;
+      lastY = y;
+      lastT = now;
+
+      if (Math.abs(velocity) > 12){
+        body.classList.add('signal-surge');
+        clearTimeout(surgeTimeout);
+        surgeTimeout = setTimeout(() => body.classList.remove('signal-surge'), 220);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    function raf(){
+      const targetSkew = Math.max(-3.5, Math.min(3.5, velocity * 0.35));
+      const targetBlur = Math.min(2.4, Math.abs(velocity) * 0.14);
+      displaySkew += (targetSkew - displaySkew) * 0.12;
+      displayBlur += (targetBlur - displayBlur) * 0.12;
+      velocity *= 0.9;
+
+      shiftEl.style.transform = 'skewY(' + displaySkew.toFixed(2) + 'deg)';
+      shiftEl.style.filter = displayBlur > 0.03 ? 'blur(' + displayBlur.toFixed(2) + 'px)' : 'none';
+
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  })();
 </script>
 
 </body>
