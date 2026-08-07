@@ -689,7 +689,7 @@
       <div class="hero-meta">
         <div>
           <div class="label">Server launches at</div>
-          <div class="value lock">🔒 200 members</div>
+          <div class="value lock" id="memberCount">🔒 Loading...</div>
         </div>
         <div>
           <div class="label">Invite contest closes</div>
@@ -893,6 +893,39 @@
 </div><!-- /#scroll-shift -->
 
 <script>
+  // ---------- DISCORD MEMBER TRACKER ---------- //
+  (function(){
+    const guildId = '1531964247599349880';
+    const memberCountEl = document.getElementById('memberCount');
+
+    if (!memberCountEl) return;
+
+    function fetchMemberCount() {
+      fetch(`https://discord.com/api/guilds/${guildId}/widget.json`)
+        .then(response => {
+          if (!response.ok) throw new Error('Widget disabled or invalid ID');
+          return response.json();
+        })
+        .then(data => {
+          const count = data.presence_count || 0;
+          
+          if (count >= 200) {
+            memberCountEl.innerHTML = `🚀 <b>UNLOCKED! (${count} online)</b>`;
+            memberCountEl.style.color = 'var(--cyan)';
+          } else {
+            memberCountEl.innerHTML = `🔒 <b>${count} / 200 online</b>`;
+          }
+        })
+        .catch(error => {
+          console.warn('Could not fetch Discord member count:', error);
+          memberCountEl.innerHTML = `🔒 <b>200 members</b>`; 
+        });
+    }
+
+    fetchMemberCount();
+    setInterval(fetchMemberCount, 60000);
+  })();
+
   // ---------- CUSTOM SMOOTH CURSOR ---------- //
   (function(){
     const cursorDot = document.querySelector('.cursor-dot');
