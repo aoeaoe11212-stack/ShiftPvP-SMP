@@ -893,7 +893,7 @@
 </div><!-- /#scroll-shift -->
 
 <script>
-  // ---------- DISCORD MEMBER TRACKER ---------- //
+  // ---------- DISCORD MEMBER TRACKER (TOTAL MEMBERS) ---------- //
   (function(){
     const guildId = '1531964247599349880';
     const memberCountEl = document.getElementById('memberCount');
@@ -907,13 +907,13 @@
           return response.json();
         })
         .then(data => {
-          const count = data.presence_count || 0;
+          const totalMembers = data.approximate_member_count || (data.members ? data.members.length : 0);
           
-          if (count >= 200) {
-            memberCountEl.innerHTML = `🚀 <b>UNLOCKED! (${count} online)</b>`;
+          if (totalMembers >= 200) {
+            memberCountEl.innerHTML = `🚀 <b>UNLOCKED! (${totalMembers})</b>`;
             memberCountEl.style.color = 'var(--cyan)';
           } else {
-            memberCountEl.innerHTML = `🔒 <b>${count} / 200 online</b>`;
+            memberCountEl.innerHTML = `🔒 <b>${totalMembers} / 200 members</b>`;
           }
         })
         .catch(error => {
