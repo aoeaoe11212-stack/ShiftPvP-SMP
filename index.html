@@ -47,16 +47,73 @@
       linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
     background-size:42px 42px;
     background-attachment:fixed;
+    cursor: none; /* Hide default cursor */
   }
 
-  a{color:inherit;text-decoration:none;}
+  a, button, [role="button"] { cursor: none; } /* Hide pointer for interactive elements */
+
   ul{list-style:none;}
+  a{color:inherit;text-decoration:none;}
 
   ::selection{background:var(--magenta);color:var(--void);}
-
   :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
 
   .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  .cursor-dot, .cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+    will-change: transform, width, height, background-color;
+  }
+
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--cyan);
+  }
+
+  .cursor-outline {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--cyan);
+    transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+  }
+
+  /* Hover state for custom cursor */
+  body.cursor-hover .cursor-outline {
+    width: 48px;
+    height: 48px;
+    background-color: rgba(0, 229, 255, 0.1);
+    border-color: var(--magenta);
+  }
+  body.cursor-hover .cursor-dot {
+    background-color: var(--magenta);
+  }
+
+  /* ---------- SCROLL REVEAL ANIMATIONS ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered delays */
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
+  .delay-4 { transition-delay: 0.4s; }
+  .delay-5 { transition-delay: 0.5s; }
 
   /* ---------- AMBIENT BACKGROUND ---------- */
   .bg-layer{
@@ -207,7 +264,15 @@
     background:radial-gradient(ellipse at center, rgba(255,46,110,.16), rgba(0,229,255,.08) 45%, transparent 70%);
     filter:blur(40px);pointer-events:none;z-index:0;
   }
-  .hero-inner{position:relative;z-index:1;}
+  .hero-inner{
+    position:relative;z-index:1;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:40px;
+  }
+  /* Fixed overlap issues by giving copy a relative z-index and auto flex shrink */
+  .hero-copy{flex:1 1 auto; max-width: 600px; position: relative; z-index: 2;}
+  .hero-clip{flex:0 1 440px; position: relative; z-index: 1;}
+  
   .eyebrow{
     font-family:var(--font-m);
     font-size:12px;font-weight:500;letter-spacing:.16em;
@@ -225,11 +290,12 @@
   h1.title{
     font-family:var(--font-d);
     font-weight:900;
-    font-size:clamp(52px,10vw,124px);
+    font-size:clamp(52px,10vw,114px);
     line-height:.92;
     letter-spacing:-.01em;
     text-transform:uppercase;
     margin-bottom:26px;
+    word-break: break-word;
   }
   .hero p.lede{
     font-size:clamp(16px,2vw,19px);
@@ -253,11 +319,12 @@
 
   /* ---------- HERO CLIP ---------- */
   .clip-frame{
-    width:280px;height:157px;flex-shrink:0;
+    width: 100%; /* Adapts to flex parent */
+    aspect-ratio: 16 / 9;
+    flex-shrink:0;
     position:relative;overflow:hidden;
     border-radius:6px;border:1px solid var(--line);
     background:var(--void-2);
-    cursor:pointer;
     transition:border-color .2s;
   }
   .clip-frame:hover{border-color:var(--cyan);}
@@ -496,6 +563,11 @@
   footer .fine{font-family:var(--font-m);font-size:11.5px;color:var(--dim);}
 
   /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1120px){
+    .hero-inner{flex-direction:column;align-items:flex-start;gap:40px;}
+    .hero-copy {max-width: 100%;}
+    .hero-clip {width: 100%; max-width: 640px; margin-right: 0;}
+  }
   @media (max-width:980px){
     .rank-grid{grid-template-columns:repeat(2,1fr);}
     .prize-grid{grid-template-columns:repeat(2,1fr);}
@@ -508,17 +580,21 @@
     .hero-meta > div{border-right:none;border-bottom:1px solid var(--line);}
     .hero-meta > div:last-child{border-bottom:none;}
     section{padding:80px 0;}
-  }
-  @media (max-width:480px){
-    .clip-frame{width:100%;height:220px;}
+    .cursor-dot, .cursor-outline { display: none; } /* Disable custom cursor on mobile */
+    body, a, button, [role="button"] { cursor: auto; }
   }
 
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+    .reveal { opacity: 1 !important; transform: none !important; }
   }
 </style>
 </head>
 <body>
+
+<!-- Custom Smooth Cursor -->
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
 
 <div class="bg-layer" aria-hidden="true">
   <div class="bg-blob bg-blob-a"></div>
@@ -546,12 +622,27 @@
 <header class="hero" id="top">
   <div class="hero-glow"></div>
   <div class="wrap hero-inner">
-    <div class="eyebrow">Season 0 — reveal in progress</div>
-    <h1 class="title glitch" data-text="SHIFTPVP">SHIFTPVP</h1>
-    <p class="lede">A survival SMP that hasn't shown its hand yet. Invite rewards are live, the rank shop is open, and the server officially launches when the community hits 200 members.</p>
-    <div class="hero-actions">
-      <a href="#invites" class="btn btn-primary">Enter the invite contest</a>
-      <a href="#ranks" class="btn btn-ghost">See the rank shop</a>
+    <div class="hero-copy reveal">
+      <div class="eyebrow">Season 0 — reveal in progress</div>
+      <h1 class="title glitch" data-text="SHIFTPVP">SHIFTPVP</h1>
+      <p class="lede">A survival SMP that hasn't shown its hand yet. Invite rewards are live, the rank shop is open, and the server officially launches when the community hits 200 members.</p>
+      <div class="hero-actions">
+        <a href="#invites" class="btn btn-primary">Enter the invite contest</a>
+        <a href="#ranks" class="btn btn-ghost">See the rank shop</a>
+      </div>
+      <div class="hero-meta">
+        <div>
+          <div class="label">Server launches at</div>
+          <div class="value lock">🔒 200 members</div>
+        </div>
+        <div>
+          <div class="label">Invite contest closes</div>
+        <div class="value countdown" id="countdown">—</div>
+      </div>
+    </div>
+    </div><!-- /.hero-copy -->
+
+    <div class="hero-clip reveal delay-1">
       <div class="clip-frame" id="clipFrame" role="button" aria-label="PvP clip, click to play or pause" tabindex="0">
         <video id="pvpClip" src="assets/video/pvp-clip.mp4" autoplay muted loop playsinline></video>
         <div class="clip-fallback"><span>NO<br>SIGNAL</span></div>
@@ -560,27 +651,17 @@
         </div>
       </div>
     </div>
-    <div class="hero-meta">
-      <div>
-        <div class="label">Server launches at</div>
-        <div class="value lock">🔒 200 members</div>
-      </div>
-      <div>
-        <div class="label">Invite contest closes</div>
-        <div class="value countdown" id="countdown">—</div>
-      </div>
-    </div>
   </div>
 </header>
 
 <section id="signal">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Transmission</div>
       <h2>The mystery is<br>unfolding slowly.</h2>
       <p>Here's everything that's confirmed so far. More gets decrypted as the member count climbs.</p>
     </div>
-    <div class="signal-log">
+    <div class="signal-log reveal delay-1">
       <div class="line"><span class="tag">[CONFIRMED]</span><span class="white">Invite rewards are officially live.</span></div>
       <div class="line"><span class="tag">[LOCKED]</span><span class="hi">Server launches at 200 members.</span></div>
       <div class="line"><span class="tag">[ACTIVE]</span><span class="mg">Invite contest running now through 20 August 2026.</span></div>
@@ -592,36 +673,36 @@
 
 <section id="invites">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Invite contest — live now</div>
       <h2>Bring people in.<br>Take the top rank.</h2>
       <p>Permanent, server-wide rewards for the top four inviters. Every placement has a minimum invite count you need to hit to actually claim it.</p>
     </div>
 
     <div class="prize-grid">
-      <div class="prize-card">
+      <div class="prize-card reveal delay-1">
         <div class="place">Placement<b>1ST</b></div>
         <div class="reward">Permanent Highest Rank</div>
         <div class="invites">Min. <b>50</b> invites</div>
       </div>
-      <div class="prize-card">
+      <div class="prize-card reveal delay-2">
         <div class="place">Placement<b>2ND</b></div>
         <div class="reward">Permanent Second Highest Rank</div>
         <div class="invites">Min. <b>30</b> invites</div>
       </div>
-      <div class="prize-card">
+      <div class="prize-card reveal delay-3">
         <div class="place">Placement<b>3RD</b></div>
         <div class="reward">Permanent Third Highest Rank</div>
         <div class="invites">Min. <b>20</b> invites</div>
       </div>
-      <div class="prize-card">
+      <div class="prize-card reveal delay-4">
         <div class="place">Placement<b>4TH</b></div>
         <div class="reward">Permanent Lowest Rank</div>
         <div class="invites">Min. <b>15</b> invites</div>
       </div>
     </div>
 
-    <div class="rules-box">
+    <div class="rules-box reveal delay-1">
       <div class="rule">
         <h4>No cheating</h4>
         <p>Fake accounts, bots, or leave-and-rejoin invites are automatically detected and result in disqualification.</p>
@@ -636,14 +717,14 @@
 
 <section id="ranks">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Rank shop — buy before launch</div>
       <h2>Five tiers.<br>One server.</h2>
       <p>Grab a rank now, while the server's still being built — before ShiftPvP officially goes live.</p>
     </div>
 
     <div class="rank-grid">
-      <div class="rank-card rank-bronze">
+      <div class="rank-card rank-bronze reveal delay-1">
         <div class="swatch"></div>
         <div class="name">Bronze</div>
         <div class="price">$2.99</div>
@@ -659,7 +740,7 @@
         <a href="#" class="rank-buy">Buy Bronze</a>
       </div>
 
-      <div class="rank-card rank-silver">
+      <div class="rank-card rank-silver reveal delay-2">
         <div class="swatch"></div>
         <div class="name">Silver</div>
         <div class="price">$5.99</div>
@@ -676,7 +757,7 @@
         <a href="#" class="rank-buy">Buy Silver</a>
       </div>
 
-      <div class="rank-card rank-gold">
+      <div class="rank-card rank-gold reveal delay-3">
         <div class="swatch"></div>
         <div class="name">Gold</div>
         <div class="price">$11.99</div>
@@ -693,7 +774,7 @@
         <a href="#" class="rank-buy">Buy Gold</a>
       </div>
 
-      <div class="rank-card rank-diamond">
+      <div class="rank-card rank-diamond reveal delay-4">
         <div class="swatch"></div>
         <div class="name">Diamond</div>
         <div class="price">$17.99</div>
@@ -707,7 +788,7 @@
         <a href="#" class="rank-buy">Buy Diamond</a>
       </div>
 
-      <div class="rank-card rank-immortal">
+      <div class="rank-card rank-immortal reveal delay-5">
         <div class="tag">Highest rank</div>
         <div class="swatch"></div>
         <div class="name">Immortal</div>
@@ -738,7 +819,68 @@
 </div><!-- /#scroll-shift -->
 
 <script>
-  // Countdown to invite contest deadline — 20 August 2026
+  // ---------- CUSTOM SMOOTH CURSOR ---------- //
+  (function(){
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let outlineX = mouseX;
+    let outlineY = mouseY;
+    
+    // Check if device supports hover before turning on custom cursor logic
+    if (window.matchMedia("(pointer: fine)").matches) {
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Dot follows instantly via 3d transform (hardware accelerated)
+        cursorDot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
+      });
+
+      // Outline follows smoothly using rAF loop
+      function animateCursor() {
+        let dx = mouseX - outlineX;
+        let dy = mouseY - outlineY;
+        
+        outlineX += dx * 0.15; // Interpolation speed (lower = more drag)
+        outlineY += dy * 0.15;
+
+        cursorOutline.style.transform = `translate3d(calc(${outlineX}px - 50%), calc(${outlineY}px - 50%), 0)`;
+        requestAnimationFrame(animateCursor);
+      }
+      requestAnimationFrame(animateCursor);
+
+      // Hover states for interactive elements
+      const interactables = document.querySelectorAll('a, button, [role="button"], input, textarea');
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      });
+    }
+  })();
+
+  // ---------- SCROLL REVEAL OBSERVER ---------- //
+  (function(){
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.1
+    };
+    
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); // Stop tracking once revealed
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  })();
+
+  // ---------- COUNTDOWN ---------- //
   const deadline = new Date('2026-08-20T23:59:59');
   const el = document.getElementById('countdown');
 
@@ -760,7 +902,7 @@
   tick();
   setInterval(tick, 1000);
 
-  // Scroll velocity — page subtly shifts (skew + blur) based on how fast you scroll
+  // ---------- SCROLL SHIFT (VELOCITY) ---------- //
   (function(){
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const shiftEl = document.getElementById('scroll-shift');
@@ -806,8 +948,7 @@
     requestAnimationFrame(raf);
   })();
 
-  // PvP clip — no native controls at all. Click (or Enter/Space) toggles play/pause.
-  // Falls back to a "NO SIGNAL" placeholder until assets/video/pvp-clip.mp4 actually exists.
+  // ---------- PVP CLIP TOGGLE ---------- //
   (function(){
     const frame = document.getElementById('clipFrame');
     const video = document.getElementById('pvpClip');
