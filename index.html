@@ -893,21 +893,21 @@
 </div><!-- /#scroll-shift -->
 
 <script>
-  // ---------- DISCORD MEMBER TRACKER (TOTAL MEMBERS) ---------- //
+  // ---------- DISCORD MEMBER TRACKER (TOTAL MEMBERS VIA INVITE API) ---------- //
   (function(){
-    const guildId = '1531964247599349880';
+    const inviteCode = 'kF7uWjvNQc';
     const memberCountEl = document.getElementById('memberCount');
 
     if (!memberCountEl) return;
 
     function fetchMemberCount() {
-      fetch(`https://discord.com/api/guilds/${guildId}/widget.json`)
+      fetch(`https://discord.com/api/v9/invites/${inviteCode}?with_counts=true`)
         .then(response => {
-          if (!response.ok) throw new Error('Widget disabled or invalid ID');
+          if (!response.ok) throw new Error('Invalid invite code');
           return response.json();
         })
         .then(data => {
-          const totalMembers = data.approximate_member_count || (data.members ? data.members.length : 0);
+          const totalMembers = data.approximate_member_count || 0;
           
           if (totalMembers >= 200) {
             memberCountEl.innerHTML = `🚀 <b>UNLOCKED! (${totalMembers})</b>`;
