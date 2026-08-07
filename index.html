@@ -47,10 +47,10 @@
       linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
     background-size:42px 42px;
     background-attachment:fixed;
-    cursor: none; /* Hide default cursor */
+    cursor: none;
   }
 
-  a, button, [role="button"] { cursor: none; } /* Hide pointer for interactive elements */
+  a, button, [role="button"] { cursor: none; }
 
   ul{list-style:none;}
   a{color:inherit;text-decoration:none;}
@@ -85,7 +85,6 @@
     transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
   }
 
-  /* Hover state for custom cursor */
   body.cursor-hover .cursor-outline {
     width: 48px;
     height: 48px;
@@ -108,7 +107,6 @@
     transform: translateY(0);
   }
 
-  /* Staggered delays */
   .delay-1 { transition-delay: 0.1s; }
   .delay-2 { transition-delay: 0.2s; }
   .delay-3 { transition-delay: 0.3s; }
@@ -269,7 +267,6 @@
     display:flex;align-items:center;justify-content:space-between;
     gap:40px;
   }
-  /* Fixed overlap issues by giving copy a relative z-index and auto flex shrink */
   .hero-copy{flex:1 1 auto; max-width: 600px; position: relative; z-index: 2;}
   .hero-clip{flex:0 1 440px; position: relative; z-index: 1;}
   
@@ -309,17 +306,17 @@
     font-weight:700;font-size:14.5px;
     padding:15px 26px;border-radius:3px;
     display:inline-flex;align-items:center;gap:8px;
-    transition:transform .15s, box-shadow .15s, background .15s;
+    transition:transform .15s, box-shadow .15s, background .15s, border-color .15s, color .15s;
     border:1px solid transparent;
   }
   .btn-primary{background:var(--hi);color:var(--void);}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px -10px rgba(255,255,255,.35);}
-  .btn-ghost{border-color:var(--line);color:var(--hi);}
+  .btn-ghost{border-color:var(--line);color:var(--hi);background:transparent;}
   .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px);}
 
   /* ---------- HERO CLIP ---------- */
   .clip-frame{
-    width: 100%; /* Adapts to flex parent */
+    width: 100%;
     aspect-ratio: 16 / 9;
     flex-shrink:0;
     position:relative;overflow:hidden;
@@ -412,6 +409,48 @@
   .signal-log .hi{color:var(--cyan);}
   .signal-log .mg{color:var(--magenta);}
   .signal-log .white{color:var(--hi);}
+
+  /* ---------- UNLOCK ANIMATION ---------- */
+  .unlock-wrapper {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #unlockBtn {
+    border: 1px solid var(--cyan);
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--cyan);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
+  }
+  #unlockBtn:hover {
+    background: var(--cyan);
+    color: var(--void);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+  }
+  .unlocked-intel {
+    width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-top: 0;
+    transition: max-height 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease, margin-top 0.4s ease;
+  }
+  .unlocked-intel.is-revealed {
+    max-height: 500px; /* arbitrary large max-height for animation */
+    opacity: 1;
+    margin-top: 24px;
+    animation: decrypt-flash 0.6s ease-out;
+  }
+  .unlocked-intel .signal-log {
+    border-color: var(--cyan);
+    background: rgba(0, 229, 255, 0.03);
+  }
+  @keyframes decrypt-flash {
+    0% { background-color: var(--cyan); opacity: 1; }
+    30% { background-color: var(--magenta); }
+    100% { background-color: transparent; opacity: 1; }
+  }
 
   /* ---------- INVITE CONTEST ---------- */
   .prize-grid{
@@ -580,7 +619,7 @@
     .hero-meta > div{border-right:none;border-bottom:1px solid var(--line);}
     .hero-meta > div:last-child{border-bottom:none;}
     section{padding:80px 0;}
-    .cursor-dot, .cursor-outline { display: none; } /* Disable custom cursor on mobile */
+    .cursor-dot, .cursor-outline { display: none; }
     body, a, button, [role="button"] { cursor: auto; }
   }
 
@@ -592,7 +631,6 @@
 </head>
 <body>
 
-<!-- Custom Smooth Cursor -->
 <div class="cursor-dot"></div>
 <div class="cursor-outline"></div>
 
@@ -640,7 +678,7 @@
         <div class="value countdown" id="countdown">—</div>
       </div>
     </div>
-    </div><!-- /.hero-copy -->
+    </div>
 
     <div class="hero-clip reveal delay-1">
       <div class="clip-frame" id="clipFrame" role="button" aria-label="PvP clip, click to play or pause" tabindex="0">
@@ -668,6 +706,25 @@
       <div class="line"><span class="tag">[OPEN]</span><span class="white">Rank shop is live — buy in before the server officially launches.</span></div>
       <div class="line"><span class="tag">[STATUS]</span><span class="lo">Awaiting 200 members to initiate server launch.</span></div>
     </div>
+    
+    <!-- NEW UNLOCK BUTTON & CONTENT START -->
+    <div class="unlock-wrapper reveal delay-2">
+      <button id="unlockBtn" class="btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        DECRYPT CLASSIFIED INTEL
+      </button>
+      
+      <div id="unlockedIntel" class="unlocked-intel">
+        <div class="signal-log">
+          <div class="line"><span class="tag">[DECRYPTED]</span><span class="white">Server Version: <strong>1.21.11+</strong></span></div>
+          <div class="line"><span class="tag">[DECRYPTED]</span><span class="hi">End Dimension: <strong>UNLOCKED</strong> (Open for exploration)</span></div>
+          <div class="line"><span class="tag">[URGENT]</span><span class="mg">Recruiting: <strong>Content Creators & Staff</strong> (Open a ticket in Discord to apply)</span></div>
+          <div class="line"><span class="tag">[DECRYPTED]</span><span class="lo">World Border: Expanding dynamically with player milestones.</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- NEW UNLOCK BUTTON & CONTENT END -->
+    
   </div>
 </section>
 
@@ -828,34 +885,49 @@
     let outlineX = mouseX;
     let outlineY = mouseY;
     
-    // Check if device supports hover before turning on custom cursor logic
     if (window.matchMedia("(pointer: fine)").matches) {
       window.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        
-        // Dot follows instantly via 3d transform (hardware accelerated)
         cursorDot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
       });
 
-      // Outline follows smoothly using rAF loop
       function animateCursor() {
         let dx = mouseX - outlineX;
         let dy = mouseY - outlineY;
-        
-        outlineX += dx * 0.15; // Interpolation speed (lower = more drag)
+        outlineX += dx * 0.15;
         outlineY += dy * 0.15;
-
         cursorOutline.style.transform = `translate3d(calc(${outlineX}px - 50%), calc(${outlineY}px - 50%), 0)`;
         requestAnimationFrame(animateCursor);
       }
       requestAnimationFrame(animateCursor);
 
-      // Hover states for interactive elements
       const interactables = document.querySelectorAll('a, button, [role="button"], input, textarea');
       interactables.forEach(el => {
         el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
         el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      });
+    }
+  })();
+
+  // ---------- UNLOCK INTEL ANIMATION LOGIC ---------- //
+  (function(){
+    const unlockBtn = document.getElementById('unlockBtn');
+    const unlockedIntel = document.getElementById('unlockedIntel');
+
+    if (unlockBtn && unlockedIntel) {
+      unlockBtn.addEventListener('click', () => {
+        if (!unlockedIntel.classList.contains('is-revealed')) {
+          unlockedIntel.classList.add('is-revealed');
+          
+          // Update button styling to indicate unlocked status
+          unlockBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> INTEL DECRYPTED';
+          unlockBtn.style.pointerEvents = 'none'; // Lock button
+          unlockBtn.style.background = 'transparent';
+          unlockBtn.style.borderColor = 'var(--line)';
+          unlockBtn.style.color = 'var(--lo)';
+          unlockBtn.style.boxShadow = 'none';
+        }
       });
     }
   })();
@@ -872,7 +944,7 @@
       entries.forEach(entry => {
         if(entry.isIntersecting){
           entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target); // Stop tracking once revealed
+          observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
