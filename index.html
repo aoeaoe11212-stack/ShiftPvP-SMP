@@ -68,29 +68,29 @@
   }
   .bg-blob-a{
     width:560px;height:560px;top:-14%;left:-10%;
-    background:var(--magenta);opacity:.16;
-    animation:driftA 24s ease-in-out infinite alternate;
+    background:var(--magenta);opacity:.26;
+    animation:driftA 22s ease-in-out infinite alternate;
   }
   .bg-blob-b{
     width:620px;height:620px;bottom:-18%;right:-12%;
-    background:var(--cyan);opacity:.12;
-    animation:driftB 30s ease-in-out infinite alternate;
+    background:var(--cyan);opacity:.20;
+    animation:driftB 28s ease-in-out infinite alternate;
   }
   .bg-blob-c{
     width:420px;height:420px;top:38%;left:40%;
-    background:var(--immortal-a);opacity:.07;
-    animation:driftC 36s ease-in-out infinite alternate;
+    background:var(--immortal-a);opacity:.12;
+    animation:driftC 34s ease-in-out infinite alternate;
   }
-  @keyframes driftA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(70px,90px) scale(1.08);}}
-  @keyframes driftB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-80px,-60px) scale(1.05);}}
-  @keyframes driftC{0%{transform:translate(0,0);}100%{transform:translate(-50px,40px);}}
+  @keyframes driftA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(90px,110px) scale(1.12);}}
+  @keyframes driftB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-100px,-80px) scale(1.08);}}
+  @keyframes driftC{0%{transform:translate(0,0);}100%{transform:translate(-70px,55px);}}
 
   .bg-noise{
     position:absolute;inset:-50%;width:200%;height:200%;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-repeat:repeat;
     background-size:140px 140px;
-    opacity:.035;
+    opacity:.06;
     mix-blend-mode:overlay;
     animation:noiseShift 1s steps(6) infinite;
     transition:opacity .3s ease;
@@ -106,17 +106,17 @@
 
   .bg-scan{
     position:absolute;inset:0;
-    background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 3px);
-    opacity:.4;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0px, rgba(255,255,255,.035) 1px, transparent 1px, transparent 3px);
+    opacity:.55;
   }
 
   .bg-vignette{
     position:absolute;inset:0;
-    background:radial-gradient(ellipse at 50% 30%, transparent 40%, rgba(8,8,13,.75) 100%);
+    background:radial-gradient(ellipse at 50% 30%, transparent 35%, rgba(8,8,13,.8) 100%);
   }
 
-  body.signal-surge .bg-noise{opacity:.09;}
-  body.signal-surge .bg-blob{opacity:.28;}
+  body.signal-surge .bg-noise{opacity:.14;}
+  body.signal-surge .bg-blob{opacity:.4;}
 
   /* ---------- SCROLL SHIFT WRAPPER ---------- */
   #scroll-shift{
@@ -237,7 +237,7 @@
     max-width:520px;
     margin-bottom:40px;
   }
-  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:56px;}
+  .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:56px;}
   .btn{
     font-family:var(--font-b);
     font-weight:700;font-size:14.5px;
@@ -250,6 +250,37 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px -10px rgba(255,255,255,.35);}
   .btn-ghost{border-color:var(--line);color:var(--hi);}
   .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px);}
+
+  /* ---------- HERO CLIP ---------- */
+  .clip-frame{
+    width:150px;height:84px;flex-shrink:0;
+    position:relative;overflow:hidden;
+    border-radius:6px;border:1px solid var(--line);
+    background:var(--void-2);
+    cursor:pointer;
+    transition:border-color .2s;
+  }
+  .clip-frame:hover{border-color:var(--cyan);}
+  .clip-frame video{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .clip-fallback{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 7px, rgba(255,255,255,.015) 7px 14px);
+  }
+  .clip-fallback span{
+    font-family:var(--font-m);font-size:9.5px;letter-spacing:.14em;
+    color:var(--dim);text-transform:uppercase;text-align:center;
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  .clip-frame.no-source .clip-fallback{display:flex;}
+  .clip-frame.no-source video{display:none;}
+  .clip-pause-icon{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(8,8,13,.4);color:var(--hi);
+    opacity:0;transition:opacity .15s;pointer-events:none;
+  }
+  .clip-frame.is-paused .clip-pause-icon{opacity:1;}
 
   .hero-meta{
     display:flex;flex-wrap:wrap;gap:0;
@@ -478,6 +509,9 @@
     .hero-meta > div:last-child{border-bottom:none;}
     section{padding:80px 0;}
   }
+  @media (max-width:480px){
+    .clip-frame{width:100%;height:150px;}
+  }
 
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
@@ -518,6 +552,13 @@
     <div class="hero-actions">
       <a href="#invites" class="btn btn-primary">Enter the invite contest</a>
       <a href="#ranks" class="btn btn-ghost">See the rank shop</a>
+      <div class="clip-frame" id="clipFrame" role="button" aria-label="PvP clip, click to play or pause" tabindex="0">
+        <video id="pvpClip" src="assets/video/pvp-clip.mp4" autoplay muted loop playsinline></video>
+        <div class="clip-fallback"><span>NO<br>SIGNAL</span></div>
+        <div class="clip-pause-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+        </div>
+      </div>
     </div>
     <div class="hero-meta">
       <div>
@@ -742,17 +783,17 @@
       lastY = y;
       lastT = now;
 
-      if (Math.abs(velocity) > 12){
+      if (Math.abs(velocity) > 8){
         body.classList.add('signal-surge');
         clearTimeout(surgeTimeout);
-        surgeTimeout = setTimeout(() => body.classList.remove('signal-surge'), 220);
+        surgeTimeout = setTimeout(() => body.classList.remove('signal-surge'), 260);
       }
     }
     window.addEventListener('scroll', onScroll, { passive: true });
 
     function raf(){
-      const targetSkew = Math.max(-3.5, Math.min(3.5, velocity * 0.35));
-      const targetBlur = Math.min(2.4, Math.abs(velocity) * 0.14);
+      const targetSkew = Math.max(-5, Math.min(5, velocity * 0.55));
+      const targetBlur = Math.min(3.2, Math.abs(velocity) * 0.18);
       displaySkew += (targetSkew - displaySkew) * 0.12;
       displayBlur += (targetBlur - displayBlur) * 0.12;
       velocity *= 0.9;
@@ -763,6 +804,27 @@
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
+  })();
+
+  // PvP clip — no native controls at all. Click (or Enter/Space) toggles play/pause.
+  // Falls back to a "NO SIGNAL" placeholder until assets/video/pvp-clip.mp4 actually exists.
+  (function(){
+    const frame = document.getElementById('clipFrame');
+    const video = document.getElementById('pvpClip');
+    if (!frame || !video) return;
+
+    function toggle(){
+      if (frame.classList.contains('no-source')) return;
+      if (video.paused){ video.play(); } else { video.pause(); }
+    }
+    frame.addEventListener('click', toggle);
+    frame.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+    video.addEventListener('play', () => frame.classList.remove('is-paused'));
+    video.addEventListener('pause', () => frame.classList.add('is-paused'));
+    video.addEventListener('error', () => frame.classList.add('no-source'));
+    video.addEventListener('playing', () => frame.classList.remove('no-source'));
   })();
 </script>
 
