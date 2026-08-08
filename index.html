@@ -1370,6 +1370,17 @@
     .hero-clip{width:100%;max-width:none;}
   }
 
+
+  /* ---------- SMOOTH SCROLLING ---------- */
+  html{
+    scroll-behavior:smooth;
+    scroll-padding-top:84px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+
 </style>
 </head>
 <body>
