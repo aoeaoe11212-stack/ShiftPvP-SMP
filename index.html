@@ -173,24 +173,76 @@
     color:var(--cyan);
   }
 
+  .actions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    margin-top:28px;
+    flex-wrap:wrap;
+  }
+
   .invite{
     display:inline-flex;
-    margin-top:28px;
-    padding:12px 20px;
-    border:1px solid var(--line);
+    align-items:center;
+    justify-content:center;
+    padding:13px 22px;
+    border:1px solid var(--cyan);
     border-radius:4px;
-    color:#aaaabd;
+    background:rgba(0,229,255,.08);
+    color:#fff;
     font-family:monospace;
     font-size:11px;
-    letter-spacing:.04em;
+    font-weight:700;
+    letter-spacing:.08em;
     text-decoration:none;
+    text-transform:uppercase;
     transition:.2s;
+    box-shadow:0 0 22px rgba(0,229,255,.08);
   }
 
   .invite:hover{
-    color:#fff;
-    border-color:var(--cyan);
-    box-shadow:0 0 22px rgba(0,229,255,.12);
+    background:var(--cyan);
+    color:#050509;
+    box-shadow:0 0 30px rgba(0,229,255,.25);
+    transform:translateY(-2px);
+  }
+
+  .server-info{
+    margin:42px auto 0;
+    width:min(760px,90vw);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    text-align:left;
+  }
+
+  .info-card{
+    background:rgba(10,10,16,.9);
+    padding:20px;
+  }
+
+  .info-card h3{
+    font-family:monospace;
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    margin-bottom:8px;
+  }
+
+  .info-card p{
+    color:#858598;
+    font-size:12px;
+    line-height:1.55;
+  }
+
+  @media(max-width:700px){
+    .server-info{grid-template-columns:1fr}
   }
 
   .error{
@@ -240,12 +292,31 @@
       Stay tuned. Invite your friends.....
     </div>
 
-    <a class="invite"
-       href="https://discord.gg/DJJsX9mqXd"
-       target="_blank"
-       rel="noopener noreferrer">
-      discord.gg/DJJsX9mqXd
-    </a>
+    <div class="actions">
+      <a class="invite"
+         href="https://discord.gg/DJJsX9mqXd"
+         target="_blank"
+         rel="noopener noreferrer">
+        JOIN DISCORD
+      </a>
+    </div>
+
+    <div class="server-info">
+      <div class="info-card">
+        <h3>Survival SMP</h3>
+        <p>Build your base, explore the world, team up with friends, and make your own story when the server opens.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Community First</h3>
+        <p>ShiftPvP is built around an active community. Invite your friends, meet new players, and help grow the server.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>What's Coming</h3>
+        <p>Custom features, ranks, special items, PvP moments, events, and more will be revealed as we get closer to release.</p>
+      </div>
+    </div>
 
     <div class="error" id="error">
       Unable to update member count. Retrying...
