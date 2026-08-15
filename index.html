@@ -1,446 +1,1132 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShiftPvP — Release Locked</title>
+
+<title>ShiftSMP — Minecraft SMP</title>
+<meta name="description" content="ShiftSMP — A community Minecraft SMP focused on survival, PvP, progression and a fair gameplay experience.">
+
 <style>
-  :root{
-    --bg:#07080c;
-    --panel:rgba(12,14,21,.72);
-    --text:#f5f7fb;
-    --muted:#898f9d;
-    --faint:#4c5260;
-    --cyan:#49e8ff;
-    --blue:#6675ff;
-    --pink:#ff477e;
-    --border:rgba(255,255,255,.085);
+:root{
+  --bg:#050914;
+  --bg2:#081224;
+  --panel:rgba(10,19,35,.78);
+  --panel2:rgba(14,27,48,.65);
+  --line:rgba(120,175,255,.14);
+  --text:#f5f8ff;
+  --muted:#8d9bb0;
+  --blue:#4da3ff;
+  --blue2:#8dceff;
+  --purple:#9278ff;
+  --green:#67e8b0;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 50% -10%,rgba(50,130,255,.20),transparent 65%),
+    radial-gradient(700px 500px at 100% 35%,rgba(120,80,255,.10),transparent 70%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.20;
+  background-image:
+    radial-gradient(rgba(255,255,255,.20) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* NAVBAR */
+
+.nav{
+  position:fixed;
+  top:14px;
+  left:5%;
+  right:5%;
+  z-index:50;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:14px 18px;
+
+  background:rgba(5,12,24,.74);
+  backdrop-filter:blur(18px);
+
+  border:1px solid var(--line);
+  border-radius:16px;
+
+  box-shadow:0 15px 50px rgba(0,0,0,.30);
+}
+
+.logo{
+  font-size:20px;
+  font-weight:950;
+  letter-spacing:-.7px;
+}
+
+.logo span{
+  color:var(--blue);
+}
+
+.navlinks{
+  display:flex;
+  gap:25px;
+  color:#aab8cc;
+  font-size:13px;
+  font-weight:750;
+}
+
+.navlinks a{
+  transition:.2s;
+}
+
+.navlinks a:hover{
+  color:#fff;
+}
+
+/* HERO */
+
+.hero{
+  min-height:850px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  padding:150px 20px 100px;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+
+  width:720px;
+  height:720px;
+
+  border-radius:50%;
+
+  background:rgba(45,133,255,.11);
+
+  filter:blur(110px);
+
+  top:40px;
+
+  z-index:-1;
+}
+
+.hero-content{
+  max-width:950px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  padding:8px 14px;
+
+  border:1px solid rgba(108,174,255,.20);
+  border-radius:999px;
+
+  background:rgba(77,163,255,.07);
+
+  color:#a9d8ff;
+
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.9px;
+}
+
+h1{
+  margin-top:24px;
+
+  font-size:clamp(58px,10vw,112px);
+
+  line-height:.88;
+
+  letter-spacing:-7px;
+
+  font-weight:950;
+}
+
+h1 span{
+  background:linear-gradient(
+    100deg,
+    #ffffff 10%,
+    #72bfff 52%,
+    #a28bff
+  );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  color:transparent;
+}
+
+.hero p{
+  max-width:680px;
+
+  margin:30px auto;
+
+  color:var(--muted);
+
+  font-size:17px;
+
+  line-height:1.75;
+}
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:11px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:13px 20px;
+
+  border-radius:11px;
+
+  font-weight:850;
+  font-size:13px;
+
+  border:1px solid var(--line);
+
+  transition:.2s;
+
+  cursor:pointer;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(45,130,255,.13);
+}
+
+.primary{
+  background:#f4f8ff;
+  color:#07111f;
+}
+
+.secondary{
+  background:rgba(255,255,255,.045);
+  color:#fff;
+}
+
+.ip{
+  margin:25px auto 0;
+
+  display:inline-flex;
+
+  padding:10px 15px;
+
+  border:1px dashed rgba(120,190,255,.28);
+  border-radius:10px;
+
+  color:#b9dcff;
+
+  background:rgba(30,75,130,.10);
+
+  font:12px ui-monospace,SFMono-Regular,monospace;
+}
+
+/* SECTIONS */
+
+section{
+  padding:100px 6%;
+  max-width:1180px;
+  margin:auto;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:42px;
+}
+
+.section-title h2{
+  font-size:38px;
+  letter-spacing:-1.8px;
+}
+
+.section-title p{
+  color:var(--muted);
+  margin-top:9px;
+}
+
+/* FEATURES */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+}
+
+.card{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17,31,53,.78),
+      rgba(8,18,34,.72)
+    );
+
+  border:1px solid var(--line);
+
+  border-radius:19px;
+
+  padding:27px;
+
+  box-shadow:0 18px 55px rgba(0,0,0,.18);
+
+  transition:.25s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(110,177,255,.28);
+}
+
+.icon{
+  width:44px;
+  height:44px;
+
+  border-radius:12px;
+
+  display:grid;
+  place-items:center;
+
+  background:rgba(77,163,255,.10);
+
+  color:var(--blue2);
+
+  font-weight:900;
+
+  margin-bottom:18px;
+}
+
+.card h3{
+  margin-bottom:9px;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.65;
+  font-size:14px;
+}
+
+/* ABOUT */
+
+.about{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:20px;
+}
+
+.about-box{
+  padding:32px;
+
+  background:linear-gradient(
+    145deg,
+    rgba(17,31,53,.75),
+    rgba(8,18,34,.72)
+  );
+
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+
+.about-box h3{
+  font-size:25px;
+  margin-bottom:14px;
+}
+
+.about-box p{
+  color:var(--muted);
+  line-height:1.8;
+  font-size:14px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.stat{
+  padding:22px;
+
+  border-radius:16px;
+
+  background:rgba(255,255,255,.035);
+
+  border:1px solid var(--line);
+}
+
+.stat strong{
+  display:block;
+
+  font-size:25px;
+
+  color:#dcecff;
+}
+
+.stat span{
+  display:block;
+
+  margin-top:4px;
+
+  color:var(--muted);
+
+  font-size:12px;
+}
+
+/* RANKS */
+
+.ranks{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.rank{
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.rank:before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(77,163,255,.07),
+      transparent 45%
+    );
+
+  pointer-events:none;
+}
+
+.rank h3{
+  font-size:24px;
+  margin:8px 0;
+}
+
+.rank .tag{
+  color:#9fcfff;
+
+  font-size:11px;
+
+  font-weight:850;
+
+  text-transform:uppercase;
+
+  letter-spacing:1.5px;
+}
+
+.price{
+  font-size:34px;
+
+  font-weight:950;
+
+  letter-spacing:-1px;
+
+  margin:12px 0 3px;
+}
+
+.price small{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:600;
+}
+
+.rank ul{
+  list-style:none;
+
+  margin:18px 0 23px;
+
+  color:#b7c3d5;
+
+  font-size:13px;
+
+  line-height:2;
+}
+
+.rank li:before{
+  content:"✓";
+
+  color:#75bdff;
+
+  margin-right:7px;
+}
+
+.rank .buy{
+  width:100%;
+
+  background:rgba(77,163,255,.10);
+
+  color:#bfe2ff;
+}
+
+.featured{
+  border-color:rgba(141,117,255,.35);
+
+  box-shadow:0 20px 70px rgba(79,55,180,.13);
+}
+
+.featured .buy{
+  background:linear-gradient(
+    90deg,
+    #5b8cff,
+    #8e70ff
+  );
+
+  color:white;
+
+  border-color:transparent;
+}
+
+.featured .tag{
+  color:#b9a8ff;
+}
+
+/* STAFF */
+
+.staff{
+  border-color:rgba(143,124,255,.18);
+}
+
+.staff .icon{
+  color:#b6aaff;
+  background:rgba(143,124,255,.09);
+}
+
+/* JOIN */
+
+.cta{
+  text-align:center;
+
+  border:1px solid var(--line);
+
+  border-radius:24px;
+
+  padding:65px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(43,105,180,.10),
+      rgba(111,81,220,.07)
+    );
+
+  box-shadow:0 25px 80px rgba(0,0,0,.18);
+}
+
+.cta h2{
+  font-size:36px;
+  letter-spacing:-1px;
+}
+
+.cta p{
+  color:var(--muted);
+  margin:12px auto 25px;
+  max-width:600px;
+}
+
+/* FOOTER */
+
+footer{
+  border-top:1px solid var(--line);
+
+  padding:28px 6%;
+
+  color:#718096;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:20px;
+
+  flex-wrap:wrap;
+
+  font-size:12px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  .navlinks{
+    display:none;
   }
 
-  *{box-sizing:border-box;margin:0;padding:0}
-
-  html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
+  .grid,
+  .ranks,
+  .about{
+    grid-template-columns:1fr;
   }
 
-  body{
-    background:
-      radial-gradient(circle at 50% 34%, rgba(73,232,255,.09), transparent 25%),
-      radial-gradient(circle at 50% 64%, rgba(102,117,255,.07), transparent 30%),
-      var(--bg);
-    color:var(--text);
-    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  }
-
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:.3;
-    background-image:
-      linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-    background-size:48px 48px;
-    mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);
-  }
-
-  .orb{
-    position:fixed;
-    width:420px;
-    height:420px;
-    border-radius:50%;
-    filter:blur(90px);
-    pointer-events:none;
-    opacity:.08;
-    animation:float 9s ease-in-out infinite alternate;
-  }
-
-  .orb.a{background:var(--cyan);left:8%;top:12%}
-  .orb.b{background:var(--pink);right:8%;bottom:8%;animation-delay:-4s}
-
-  @keyframes float{
-    from{transform:translate3d(0,0,0)}
-    to{transform:translate3d(0,-22px,0)}
-  }
-
-  .page{
-    width:100vw;
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    position:relative;
-  }
-
-  .shell{
-    width:min(900px,94vw);
-    text-align:center;
-  }
-
-  .brand{
-    font-size:13px;
-    font-weight:800;
-    letter-spacing:.3em;
-    color:#fff;
-    margin-bottom:34px;
-  }
-
-  .brand span{color:var(--pink)}
-
-  .badge{
-    width:max-content;
-    max-width:100%;
-    margin:0 auto 20px;
-    display:flex;
-    align-items:center;
-    gap:9px;
-    padding:8px 12px;
-    border:1px solid var(--border);
-    border-radius:999px;
-    background:rgba(255,255,255,.025);
-    color:#9da3b0;
-    font:700 10px/1 monospace;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-  }
-
-  .badge-dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:var(--cyan);
-    box-shadow:0 0 12px var(--cyan);
-    animation:blink 1.6s infinite;
-  }
-
-  @keyframes blink{
-    0%,100%{opacity:1}
-    50%{opacity:.3}
+  .stats{
+    grid-template-columns:1fr 1fr;
   }
 
   h1{
-    font-size:clamp(42px,7.2vw,78px);
-    line-height:1;
-    font-weight:900;
-    letter-spacing:-.055em;
-    margin-bottom:16px;
+    letter-spacing:-4px;
   }
 
-  .sub{
-    width:min(600px,90vw);
-    margin:0 auto;
-    color:var(--muted);
-    font-size:15px;
-    line-height:1.65;
+  .hero{
+    min-height:720px;
   }
 
-  .unlock{
-    width:min(760px,94vw);
-    margin:38px auto 0;
-    padding:28px 28px 25px;
-    border:1px solid var(--border);
-    border-radius:18px;
-    background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.018));
-    box-shadow:
-      0 28px 70px rgba(0,0,0,.34),
-      inset 0 1px rgba(255,255,255,.04);
-    backdrop-filter:blur(16px);
+  .section-title h2{
+    font-size:31px;
   }
-
-  .member-label{
-    color:var(--faint);
-    font:700 10px/1 monospace;
-    letter-spacing:.15em;
-    text-transform:uppercase;
-    margin-bottom:10px;
-  }
-
-  .count{
-    display:inline-block;
-    font-size:clamp(76px,13vw,132px);
-    line-height:.88;
-    font-weight:950;
-    letter-spacing:-.07em;
-    background:linear-gradient(100deg,#fff 15%,var(--cyan) 55%,#fff);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    transform-origin:center;
-  }
-
-  .count.bump{
-    animation:bump .52s cubic-bezier(.2,.9,.2,1);
-  }
-
-  @keyframes bump{
-    0%{transform:scale(1)}
-    20%{transform:scale(1.075) rotate(-1deg)}
-    42%{transform:scale(.965) rotate(.8deg)}
-    65%{transform:scale(1.02) rotate(-.35deg)}
-    100%{transform:scale(1)}
-  }
-
-  .target{
-    margin-top:12px;
-    color:#7d8491;
-    font:700 11px/1.4 monospace;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-  }
-
-  .progress{
-    margin:22px auto 0;
-    width:min(600px,100%);
-    height:8px;
-    border-radius:999px;
-    background:#161922;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,.05);
-  }
-
-  .progress-fill{
-    width:0%;
-    height:100%;
-    border-radius:inherit;
-    background:linear-gradient(90deg,var(--cyan),var(--blue),var(--pink));
-    box-shadow:0 0 20px rgba(73,232,255,.22);
-    transition:width .8s ease;
-  }
-
-  .remaining{
-    margin-top:14px;
-    font:700 12px/1.4 monospace;
-    color:#9ba1ae;
-    letter-spacing:.05em;
-  }
-
-  .remaining strong{color:#fff}
-
-  .release{
-    margin-top:25px;
-    padding-top:21px;
-    border-top:1px solid var(--border);
-    font-size:18px;
-    font-weight:800;
-    line-height:1.45;
-  }
-
-  .release span{color:var(--cyan)}
-
-  .release-sub{
-    margin-top:5px;
-    color:#737986;
-    font-size:12px;
-    font-weight:500;
-  }
-
-  .actions{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin-top:23px;
-  }
-
-  .button{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:160px;
-    padding:13px 20px;
-    border-radius:8px;
-    text-decoration:none;
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    transition:transform .18s,box-shadow .18s,background .18s;
-  }
-
-  .button.primary{
-    color:#05070b;
-    background:#fff;
-    box-shadow:0 8px 28px rgba(255,255,255,.08);
-  }
-
-  .button.primary:hover{
-    transform:translateY(-2px);
-    box-shadow:0 13px 35px rgba(255,255,255,.13);
-  }
-
-  .note{
-    margin-top:20px;
-    color:#555b68;
-    font:10px/1.5 monospace;
-    letter-spacing:.05em;
-  }
-
-  .flash{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    background:rgba(73,232,255,.04);
-    opacity:0;
-    z-index:20;
-  }
-
-  .flash.on{animation:flash .18s ease}
-
-  @keyframes flash{
-    0%{opacity:0}
-    35%{opacity:1}
-    100%{opacity:0}
-  }
-
-  @media(max-width:560px){
-    .page{padding:16px}
-    .brand{margin-bottom:25px}
-    .unlock{padding:22px 18px 20px;border-radius:14px;margin-top:27px}
-    .release{font-size:16px}
-    .button{min-width:145px}
-  }
+}
 </style>
 </head>
 
 <body>
-<div class="orb a"></div>
-<div class="orb b"></div>
-<div class="flash" id="flash"></div>
 
-<main class="page">
-  <section class="shell">
-    <div class="brand">SHIFT<span>PVP</span></div>
+<!-- NAVIGATION -->
+
+<nav class="nav">
+
+  <a class="logo" href="#">
+    Shift<span>SMP</span>
+  </a>
+
+  <div class="navlinks">
+    <a href="#about">About</a>
+    <a href="#features">Features</a>
+    <a href="#ranks">Ranks</a>
+    <a href="#staff">Staff</a>
+    <a href="#join">Join</a>
+  </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<header class="hero">
+
+  <div class="hero-content">
 
     <div class="badge">
-      <span class="badge-dot"></span>
-      RELEASE LOCKED
+      ⚡ SURVIVE · BUILD · COMPETE
     </div>
 
-    <h1>The server is waiting.</h1>
+    <h1>
+      Welcome to <span>ShiftSMP</span>
+    </h1>
 
-    <p class="sub">
-      ShiftPvP SMP opens when the community reaches 200 members.
-      Every person you bring gets us closer to the release.
+    <p>
+      A community-driven Minecraft SMP where survival,
+      PvP, progression and player freedom come together.
+      Build your empire, make alliances, fight your rivals
+      and create your own story.
     </p>
 
-    <div class="unlock">
-      <div class="member-label">Community progress</div>
+    <div class="buttons">
 
-      <div class="count" id="members">—</div>
+      <a class="btn primary" href="#join">
+        Join ShiftSMP
+      </a>
 
-      <div class="target">members / 200 required</div>
+      <a class="btn secondary" href="#ranks">
+        View Ranks
+      </a>
 
-      <div class="progress">
-        <div class="progress-fill" id="fill"></div>
-      </div>
-
-      <div class="remaining" id="remaining">Connecting to Discord...</div>
-
-      <div class="release">
-        Release on <span>200 members.</span>
-        <div class="release-sub">Invite your friends. Help unlock what's next.</div>
-      </div>
-
-      <div class="actions">
-        <a class="button primary"
-           href="https://discord.gg/DJJsX9mqXd"
-           target="_blank"
-           rel="noopener noreferrer">Join Discord</a>
-      </div>
     </div>
 
-    <div class="note">MORE MEMBERS → CLOSER TO RELEASE → MORE TO REVEAL</div>
-  </section>
-</main>
+    <div class="ip">
+      🎮 YOUR-SERVER-IP
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ABOUT -->
+
+<section id="about">
+
+  <div class="section-title">
+
+    <h2>What is ShiftSMP?</h2>
+
+    <p>
+      More than just another Minecraft server.
+    </p>
+
+  </div>
+
+
+  <div class="about">
+
+    <div class="about-box">
+
+      <h3>Built for players.</h3>
+
+      <p>
+        ShiftSMP is a Minecraft survival server designed
+        around a simple idea: give players the freedom
+        to play their own way.
+        <br><br>
+        Build massive bases, explore the world, create
+        your own economy, form alliances, compete with
+        other players or simply chill with friends.
+        <br><br>
+        Our goal is to keep the server fun, active and
+        rewarding without turning progression into a
+        pay-to-win system.
+      </p>
+
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong>⚔</strong>
+        <span>Survival & PvP</span>
+      </div>
+
+      <div class="stat">
+        <strong>∞</strong>
+        <span>Player Freedom</span>
+      </div>
+
+      <div class="stat">
+        <strong>◆</strong>
+        <span>Balanced Ranks</span>
+      </div>
+
+      <div class="stat">
+        <strong>◎</strong>
+        <span>Community Driven</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section id="features">
+
+  <div class="section-title">
+
+    <h2>Why ShiftSMP?</h2>
+
+    <p>
+      Everything you need for a long-term SMP experience.
+    </p>
+
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card">
+
+      <div class="icon">⚔</div>
+
+      <h3>PvP & Survival</h3>
+
+      <p>
+        Explore the world, gather resources, build your
+        base and fight when the time comes.
+      </p>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">◆</div>
+
+      <h3>Fair Progression</h3>
+
+      <p>
+        Progress through gameplay rather than your wallet.
+        Ranks provide useful perks without dominating
+        normal players.
+      </p>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">◎</div>
+
+      <h3>Active Community</h3>
+
+      <p>
+        Meet new players, form teams, make alliances
+        and become part of the ShiftSMP community.
+      </p>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">⌂</div>
+
+      <h3>Build Your World</h3>
+
+      <p>
+        Create anything from a small starter base to
+        an enormous kingdom built with your friends.
+      </p>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">◇</div>
+
+      <h3>Player Economy</h3>
+
+      <p>
+        Trade with other players, build your wealth and
+        create your own path through the server economy.
+      </p>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="icon">✦</div>
+
+      <h3>Events & Features</h3>
+
+      <p>
+        Special events, custom features and server
+        activities keep the world from becoming stale.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- RANKS -->
+
+<section id="ranks">
+
+  <div class="section-title">
+
+    <h2>Player Ranks</h2>
+
+    <p>
+      One-time purchases. No monthly subscriptions.
+    </p>
+
+  </div>
+
+
+  <div class="grid ranks">
+
+
+    <!-- ELITE -->
+
+    <div class="card rank">
+
+      <div class="tag">
+        Player Rank
+      </div>
+
+      <h3>ELITE</h3>
+
+      <div class="price">
+        Rp15K
+        <small>one-time</small>
+      </div>
+
+      <ul>
+        <li>Hat command</li>
+        <li>Workbench access</li>
+        <li>Ender Chest access</li>
+        <li>Cosmetic perks</li>
+        <li>Elite prefix</li>
+      </ul>
+
+      <a
+        class="btn buy"
+        href="https://discord.gg/kF7uWjvNQc"
+        target="_blank"
+      >
+        Get Elite
+      </a>
+
+    </div>
+
+
+    <!-- MASTER -->
+
+    <div class="card rank featured">
+
+      <div class="tag">
+        Most Popular
+      </div>
+
+      <h3>MASTER</h3>
+
+      <div class="price">
+        Rp30K
+        <small>one-time</small>
+      </div>
+
+      <ul>
+        <li>Everything in Elite</li>
+        <li>Nickname command</li>
+        <li>More cosmetic perks</li>
+        <li>Master prefix</li>
+        <li>Additional quality-of-life perks</li>
+      </ul>
+
+      <a
+        class="btn buy"
+        href="https://discord.gg/kF7uWjvNQc"
+        target="_blank"
+      >
+        Get Master
+      </a>
+
+    </div>
+
+
+    <!-- SUPREME -->
+
+    <div class="card rank">
+
+      <div class="tag">
+        Top Player Rank
+      </div>
+
+      <h3>SUPREME</h3>
+
+      <div class="price">
+        Rp50K
+        <small>one-time</small>
+      </div>
+
+      <ul>
+        <li>Everything in Master</li>
+        <li>Anvil access</li>
+        <li>Extra cosmetic perks</li>
+        <li>Exclusive cosmetics</li>
+        <li>Supreme prefix</li>
+      </ul>
+
+      <a
+        class="btn buy"
+        href="https://discord.gg/kF7uWjvNQc"
+        target="_blank"
+      >
+        Get Supreme
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- STAFF -->
+
+<section id="staff">
+
+  <div class="section-title">
+
+    <h2>Server Staff</h2>
+
+    <p>
+      The team behind ShiftSMP.
+    </p>
+
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card staff">
+
+      <div class="icon">◆</div>
+
+      <h3>Moderator</h3>
+
+      <p>
+        Keeps the community friendly, handles reports
+        and helps maintain fair gameplay.
+      </p>
+
+    </div>
+
+
+    <div class="card staff">
+
+      <div class="icon">◆</div>
+
+      <h3>Manager</h3>
+
+      <p>
+        Manages server operations, staff coordination
+        and the overall player experience.
+      </p>
+
+    </div>
+
+
+    <div class="card staff">
+
+      <div class="icon">◆</div>
+
+      <h3>Owner</h3>
+
+      <p>
+        Leads ShiftSMP, develops new features and
+        keeps the server moving forward.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- JOIN -->
+
+<section id="join">
+
+  <div class="cta">
+
+    <h2>
+      Ready to enter ShiftSMP?
+    </h2>
+
+    <p>
+      Grab Minecraft Java Edition, join our Discord
+      and start your journey.
+    </p>
+
+    <div class="buttons">
+
+      <a
+        class="btn primary"
+        href="https://discord.gg/kF7uWjvNQc"
+        target="_blank"
+      >
+        Join Discord
+      </a>
+
+      <button
+        class="btn secondary"
+        onclick="copyIP()"
+      >
+        Copy Server IP
+      </button>
+
+    </div>
+
+    <p
+      id="copied"
+      style="display:none;color:#78c4ff;margin-top:14px;font-size:13px"
+    >
+      Server IP copied!
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  <span>
+    © 2026 ShiftSMP. All rights reserved.
+  </span>
+
+  <span>
+    Minecraft is a trademark of Mojang Studios.
+  </span>
+
+</footer>
+
 
 <script>
-  const INVITE_CODE = "DJJsX9mqXd";
-  const TARGET = 200;
 
-  const membersEl = document.getElementById("members");
-  const fillEl = document.getElementById("fill");
-  const remainingEl = document.getElementById("remaining");
-  const flashEl = document.getElementById("flash");
+function copyIP(){
 
-  let previousCount = null;
+  const ip = "YOUR-SERVER-IP";
 
-  function bump(){
-    membersEl.classList.remove("bump");
-    void membersEl.offsetWidth;
-    membersEl.classList.add("bump");
-    flashEl.classList.remove("on");
-    void flashEl.offsetWidth;
-    flashEl.classList.add("on");
-  }
+  navigator.clipboard.writeText(ip).then(() => {
 
-  function animateCount(from,to){
-    const start = performance.now();
-    const duration = 750;
+    const message = document.getElementById("copied");
 
-    function step(now){
-      const p = Math.min((now-start)/duration,1);
-      const eased = 1-Math.pow(1-p,3);
-      const value = Math.round(from+(to-from)*eased);
-      membersEl.textContent = value.toLocaleString();
+    message.style.display = "block";
 
-      if(p<1){
-        requestAnimationFrame(step);
-      }else{
-        membersEl.textContent = to.toLocaleString();
-        bump();
-      }
-    }
+    setTimeout(() => {
+      message.style.display = "none";
+    }, 1800);
 
-    requestAnimationFrame(step);
-  }
+  });
 
-  async function updateMembers(){
-    try{
-      const res = await fetch(
-        `https://discord.com/api/v10/invites/${INVITE_CODE}?with_counts=true`,
-        {cache:"no-store"}
-      );
+}
 
-      if(!res.ok) throw new Error("Discord request failed");
-
-      const data = await res.json();
-      const count = Number(data.approximate_member_count);
-
-      if(!Number.isFinite(count)) throw new Error("Missing count");
-
-      if(previousCount === null){
-        membersEl.textContent = count.toLocaleString();
-      }else if(previousCount !== count){
-        animateCount(previousCount,count);
-      }
-
-      previousCount = count;
-
-      const percent = Math.min((count/TARGET)*100,100);
-      const left = Math.max(TARGET-count,0);
-
-      fillEl.style.width = percent+"%";
-
-      if(count >= TARGET){
-        remainingEl.innerHTML = "<strong>200 MEMBERS REACHED.</strong> THE RELEASE IS UNLOCKED.";
-        document.querySelector(".badge").innerHTML =
-          '<span class="badge-dot"></span> RELEASE UNLOCKED';
-      }else if(left === 1){
-        remainingEl.innerHTML = "<strong>1 MORE MEMBER.</strong> WE OPEN.";
-      }else{
-        remainingEl.innerHTML =
-          `<strong>${left} MORE MEMBERS</strong> until the release`;
-      }
-    }catch(e){
-      remainingEl.textContent = "Waiting for Discord member data...";
-    }
-  }
-
-  updateMembers();
-  setInterval(updateMembers,30000);
 </script>
+
 </body>
 </html>
+```
