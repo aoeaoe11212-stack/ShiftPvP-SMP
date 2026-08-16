@@ -1,38 +1,33 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ShiftSMP — Minecraft Survival Server</title>
+<title>ShiftSMP — Minecraft SMP</title>
 
-<meta name="description"
-content="ShiftSMP — A community Minecraft SMP focused on survival, PvP, freedom and a fair player experience.">
+<meta
+  name="description"
+  content="ShiftSMP — a community Minecraft SMP focused on survival, PvP, teams and a fair player experience."
+>
 
 <style>
-
 :root{
-  --bg:#040812;
-  --bg2:#071225;
-  --bg3:#0a172b;
-
-  --panel:rgba(11,22,40,.76);
-  --panel2:rgba(15,29,51,.72);
-
-  --line:rgba(120,175,255,.14);
-  --line2:rgba(120,175,255,.22);
+  --bg:#06101f;
+  --bg2:#0a1830;
+  --card:rgba(13,29,52,.78);
+  --line:rgba(110,175,255,.16);
 
   --text:#f5f8ff;
-  --muted:#8d9bb0;
+  --muted:#9eacc2;
 
-  --blue:#4da3ff;
-  --blue2:#8dceff;
-  --purple:#9278ff;
+  --blue:#42b8ff;
+  --blue2:#78d5ff;
+  --purple:#8d6cff;
 
-  --green:#6ce5ae;
-
-  --radius:20px;
+  --elite:#aeb6c2;
+  --master:#69d8ff;
+  --supreme:#b77cff;
 }
 
 *{
@@ -59,68 +54,27 @@ body{
 
   background:
     radial-gradient(
-      900px 550px at 50% -10%,
-      rgba(52,137,255,.20),
-      transparent 65%
+      circle at 15% 15%,
+      rgba(45,150,255,.14),
+      transparent 32%
     ),
-
     radial-gradient(
-      800px 550px at 100% 30%,
-      rgba(116,77,255,.11),
-      transparent 70%
+      circle at 85% 20%,
+      rgba(120,70,255,.11),
+      transparent 30%
     ),
-
-    radial-gradient(
-      700px 500px at 0% 70%,
-      rgba(30,120,255,.07),
-      transparent 70%
-    ),
-
     linear-gradient(
-      180deg,
+      145deg,
       var(--bg),
       var(--bg2)
     );
 
   min-height:100vh;
-  overflow-x:hidden;
-}
-
-body:before{
-  content:"";
-
-  position:fixed;
-  inset:0;
-
-  pointer-events:none;
-
-  opacity:.16;
-
-  background-image:
-    radial-gradient(
-      rgba(255,255,255,.25) 1px,
-      transparent 1px
-    );
-
-  background-size:42px 42px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      black,
-      transparent 75%
-    );
-
-  z-index:-1;
 }
 
 a{
   color:inherit;
   text-decoration:none;
-}
-
-button{
-  font-family:inherit;
 }
 
 /* =========================
@@ -129,37 +83,27 @@ button{
 
 .nav{
   position:fixed;
-
-  top:14px;
-  left:4%;
-  right:4%;
-
-  z-index:100;
+  top:0;
+  left:0;
+  right:0;
+  z-index:20;
 
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 
-  padding:14px 18px;
+  padding:18px 6%;
 
-  background:rgba(4,10,21,.76);
+  background:rgba(5,13,25,.72);
+  backdrop-filter:blur(16px);
 
-  backdrop-filter:blur(20px);
-
-  border:1px solid var(--line);
-
-  border-radius:16px;
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.30);
+  border-bottom:1px solid var(--line);
 }
 
 .logo{
-  font-size:21px;
-
-  font-weight:950;
-
-  letter-spacing:-.8px;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-.5px;
 }
 
 .logo span{
@@ -168,16 +112,11 @@ button{
 
 .navlinks{
   display:flex;
+  gap:24px;
 
-  align-items:center;
-
-  gap:25px;
-
-  color:#9eacc1;
-
-  font-size:13px;
-
-  font-weight:750;
+  color:#bdc8d9;
+  font-size:14px;
+  font-weight:600;
 }
 
 .navlinks a{
@@ -188,194 +127,137 @@ button{
   color:white;
 }
 
-.nav-discord{
-  padding:9px 14px;
-
-  border-radius:9px;
-
-  background:rgba(77,163,255,.10);
-
-  border:1px solid rgba(77,163,255,.18);
-
-  color:#bfe2ff !important;
-}
 
 /* =========================
    HERO
 ========================= */
 
 .hero{
-  min-height:900px;
+  min-height:760px;
 
   display:flex;
-
   align-items:center;
-
   justify-content:center;
 
   text-align:center;
 
-  padding:
-    150px
-    20px
-    100px;
+  padding:130px 20px 90px;
 
   position:relative;
-
   overflow:hidden;
 }
 
-.hero-glow{
+.hero:before{
+  content:"";
+
   position:absolute;
 
-  width:650px;
-  height:650px;
+  width:520px;
+  height:520px;
 
   border-radius:50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(57,143,255,.14),
-      transparent 68%
-    );
+  background:rgba(57,145,255,.12);
 
-  filter:blur(25px);
-
-  z-index:-1;
+  filter:blur(80px);
 }
 
 .hero-content{
-  max-width:1000px;
+  position:relative;
+  max-width:850px;
 }
 
 .badge{
   display:inline-flex;
 
-  align-items:center;
+  padding:8px 13px;
 
-  gap:8px;
-
-  padding:8px 14px;
-
-  border:1px solid rgba(108,174,255,.20);
-
+  border:1px solid var(--line);
   border-radius:999px;
 
-  background:rgba(77,163,255,.07);
+  background:rgba(255,255,255,.04);
 
-  color:#a9d8ff;
+  color:#bcdcff;
 
-  font-size:11px;
+  font-size:13px;
+  font-weight:700;
 
-  font-weight:850;
-
-  letter-spacing:1px;
+  margin-bottom:22px;
 }
 
 h1{
-  margin-top:25px;
+  font-size:clamp(55px,10vw,105px);
 
-  font-size:
-    clamp(
-      58px,
-      10vw,
-      115px
-    );
+  line-height:.9;
 
-  line-height:.88;
-
-  letter-spacing:-7px;
-
-  font-weight:950;
+  letter-spacing:-6px;
 }
 
 h1 span{
   background:
     linear-gradient(
-      100deg,
-      #fff 8%,
-      #72bfff 52%,
-      #a18bff 92%
+      90deg,
+      #ffffff,
+      var(--blue2),
+      #9d8cff
     );
 
   -webkit-background-clip:text;
-
   background-clip:text;
 
   color:transparent;
 }
 
-.hero-subtitle{
-  max-width:700px;
+.hero p{
+  max-width:650px;
 
-  margin:30px auto 0;
+  margin:25px auto;
 
   color:var(--muted);
 
-  font-size:17px;
-
-  line-height:1.8;
+  font-size:18px;
+  line-height:1.7;
 }
 
-.hero-buttons{
+.buttons{
   display:flex;
 
   justify-content:center;
 
-  gap:11px;
+  gap:12px;
 
   flex-wrap:wrap;
-
-  margin-top:30px;
 }
 
 .btn{
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:8px;
-
-  padding:13px 21px;
+  padding:13px 20px;
 
   border-radius:11px;
 
-  font-weight:850;
-
-  font-size:13px;
+  font-weight:800;
+  font-size:14px;
 
   border:1px solid var(--line);
 
   transition:.2s;
-
-  cursor:pointer;
 }
 
 .btn:hover{
   transform:translateY(-2px);
-
-  box-shadow:
-    0 12px 35px
-    rgba(45,130,255,.13);
 }
 
 .primary{
-  background:#f4f8ff;
-
-  color:#07111f;
+  background:#fff;
+  color:#08111f;
 }
 
 .secondary{
-  background:rgba(255,255,255,.045);
-
+  background:rgba(255,255,255,.05);
   color:white;
 }
 
-.server-ip{
-  margin:25px auto 0;
+.ip{
+  margin:28px auto 0;
 
   display:inline-flex;
 
@@ -383,85 +265,32 @@ h1 span{
 
   gap:9px;
 
-  padding:10px 15px;
+  padding:10px 14px;
 
-  border:1px dashed
-    rgba(120,190,255,.28);
+  border:1px dashed rgba(120,190,255,.35);
 
   border-radius:10px;
 
-  color:#b9dcff;
+  color:#bcdcff;
 
-  background:rgba(30,75,130,.10);
+  background:rgba(30,75,130,.14);
 
-  font:
-    12px
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    monospace;
+  font-family:ui-monospace,monospace;
+
+  font-size:13px;
 }
+
 
 /* =========================
-   SERVER STATUS
-========================= */
-
-.status{
-  max-width:760px;
-
-  margin:-20px auto 0;
-
-  padding:14px 18px;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  gap:10px;
-
-  flex-wrap:wrap;
-
-  border:1px solid var(--line);
-
-  border-radius:14px;
-
-  background:rgba(8,18,34,.60);
-
-  color:#9eacc1;
-
-  font-size:12px;
-}
-
-.status-dot{
-  width:8px;
-  height:8px;
-
-  border-radius:50%;
-
-  background:var(--green);
-
-  box-shadow:
-    0 0 12px
-    rgba(108,229,174,.65);
-}
-
-.status strong{
-  color:#dfffee;
-}
-
-/* =========================
-   GENERAL SECTIONS
+   SECTIONS
 ========================= */
 
 section{
-  max-width:1180px;
+  padding:90px 6%;
+
+  max-width:1200px;
 
   margin:auto;
-
-  padding:
-    105px 6%;
 }
 
 .section-title{
@@ -471,106 +300,20 @@ section{
 }
 
 .section-title h2{
-  font-size:39px;
+  font-size:38px;
 
-  letter-spacing:-1.8px;
+  letter-spacing:-1.5px;
 }
 
 .section-title p{
+  color:var(--muted);
+
   margin-top:10px;
-
-  color:var(--muted);
-
-  font-size:14px;
 }
+
 
 /* =========================
-   ABOUT
-========================= */
-
-.about{
-  display:grid;
-
-  grid-template-columns:
-    1.15fr
-    .85fr;
-
-  gap:18px;
-}
-
-.about-main,
-.about-side{
-  padding:32px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:var(--radius);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(17,32,55,.76),
-      rgba(7,17,32,.70)
-    );
-}
-
-.about-main h3{
-  font-size:28px;
-
-  margin-bottom:15px;
-
-  letter-spacing:-.7px;
-}
-
-.about-main p{
-  color:var(--muted);
-
-  font-size:14px;
-
-  line-height:1.85;
-}
-
-.about-side{
-  display:flex;
-
-  flex-direction:column;
-
-  gap:12px;
-}
-
-.about-point{
-  padding:18px;
-
-  border-radius:14px;
-
-  background:
-    rgba(255,255,255,.035);
-
-  border:
-    1px solid
-    rgba(120,175,255,.08);
-}
-
-.about-point strong{
-  display:block;
-
-  margin-bottom:5px;
-
-  font-size:14px;
-}
-
-.about-point span{
-  color:var(--muted);
-
-  font-size:12px;
-
-  line-height:1.6;
-}
-
-/* =========================
-   FEATURES
+   CARDS
 ========================= */
 
 .grid{
@@ -579,143 +322,65 @@ section{
   grid-template-columns:
     repeat(3,1fr);
 
-  gap:17px;
+  gap:18px;
 }
 
 .card{
-  padding:27px;
+  background:var(--card);
 
-  border:
-    1px solid
-    var(--line);
+  border:1px solid var(--line);
 
-  border-radius:var(--radius);
+  border-radius:18px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(17,31,53,.78),
-      rgba(8,18,34,.72)
-    );
+  padding:26px;
 
   box-shadow:
-    0 18px 55px
+    0 20px 60px
     rgba(0,0,0,.16);
 
-  transition:.25s;
+  transition:
+    transform .2s,
+    border-color .2s;
 }
 
 .card:hover{
   transform:translateY(-4px);
 
   border-color:
-    rgba(110,177,255,.28);
+    rgba(110,190,255,.32);
 }
 
 .icon{
-  width:44px;
-  height:44px;
-
-  display:grid;
-
-  place-items:center;
+  width:42px;
+  height:42px;
 
   border-radius:12px;
 
-  margin-bottom:18px;
+  display:grid;
+  place-items:center;
 
   background:
-    rgba(77,163,255,.10);
+    rgba(77,163,255,.12);
 
   color:var(--blue2);
 
   font-weight:900;
 
-  font-size:17px;
+  margin-bottom:18px;
 }
 
 .card h3{
   margin-bottom:9px;
-
-  font-size:17px;
 }
 
 .card p{
   color:var(--muted);
 
-  font-size:13px;
+  line-height:1.65;
 
-  line-height:1.7;
+  font-size:14px;
 }
 
-/* =========================
-   GAMEPLAY
-========================= */
-
-.gameplay{
-  display:grid;
-
-  grid-template-columns:
-    repeat(2,1fr);
-
-  gap:17px;
-}
-
-.gameplay-card{
-  min-height:210px;
-
-  position:relative;
-
-  overflow:hidden;
-}
-
-.gameplay-card:after{
-  content:"";
-
-  position:absolute;
-
-  width:180px;
-  height:180px;
-
-  right:-70px;
-  bottom:-80px;
-
-  border-radius:50%;
-
-  background:
-    rgba(77,163,255,.08);
-
-  filter:blur(15px);
-
-  pointer-events:none;
-}
-
-.gameplay-number{
-  color:#568bc0;
-
-  font:
-    11px
-    ui-monospace,
-    monospace;
-
-  margin-bottom:18px;
-}
-
-.gameplay-card h3{
-  font-size:22px;
-
-  margin-bottom:10px;
-}
-
-.gameplay-card p{
-  max-width:520px;
-
-  color:var(--muted);
-
-  font-size:13px;
-
-  line-height:1.8;
-}
 
 /* =========================
    RANKS
@@ -727,196 +392,97 @@ section{
 }
 
 .rank{
-  position:relative;
-
   text-align:center;
 
+  position:relative;
+
   overflow:hidden;
-}
-
-.rank:before{
-  content:"";
-
-  position:absolute;
-
-  inset:0;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(77,163,255,.07),
-      transparent 48%
-    );
-
-  pointer-events:none;
-}
-
-.rank .tag{
-  color:#9fcfff;
-
-  font-size:11px;
-
-  font-weight:850;
-
-  text-transform:uppercase;
-
-  letter-spacing:1.5px;
 }
 
 .rank h3{
   font-size:25px;
 
-  margin:9px 0;
+  margin-bottom:8px;
+
+  letter-spacing:1px;
 }
 
-.price{
-  font-size:34px;
+.rank .tag{
+  font-size:12px;
 
-  font-weight:950;
+  font-weight:800;
 
-  letter-spacing:-1px;
+  text-transform:uppercase;
 
-  margin:13px 0 4px;
-}
-
-.price small{
-  display:block;
-
-  margin-top:2px;
-
-  color:var(--muted);
-
-  font-size:11px;
-
-  font-weight:600;
+  letter-spacing:1px;
 }
 
 .rank ul{
   list-style:none;
 
-  margin:
-    20px 0
-    24px;
+  margin-top:18px;
 
   color:#b7c3d5;
 
-  font-size:13px;
+  font-size:14px;
 
   line-height:2;
 }
 
-.rank li:before{
-  content:"✓";
+.rank li::before{
+  content:"✦";
 
-  color:#75bdff;
+  margin-right:8px;
 
-  margin-right:7px;
+  color:var(--blue2);
 }
 
-.rank .buy{
-  width:100%;
-
-  background:
-    rgba(77,163,255,.10);
-
-  color:#bfe2ff;
-}
-
-.featured{
+.rank.elite{
   border-color:
-    rgba(141,117,255,.35);
-
-  box-shadow:
-    0 20px 70px
-    rgba(79,55,180,.13);
+    rgba(174,182,194,.22);
 }
 
-.featured .tag{
-  color:#b9a8ff;
+.rank.elite .tag,
+.rank.elite h3{
+  color:var(--elite);
 }
 
-.featured .buy{
-  color:white;
-
-  background:
-    linear-gradient(
-      90deg,
-      #5b8cff,
-      #8e70ff
-    );
-
-  border-color:transparent;
+.rank.master{
+  border-color:
+    rgba(105,216,255,.28);
 }
 
-/* =========================
-   FAIR PLAY
-========================= */
-
-.fair{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:18px;
+.rank.master .tag,
+.rank.master h3{
+  color:var(--master);
 }
 
-.fair-box{
-  padding:30px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:var(--radius);
-
-  background:
-    rgba(10,20,37,.65);
+.rank.supreme{
+  border-color:
+    rgba(183,124,255,.30);
 }
 
-.fair-box h3{
-  font-size:22px;
-
-  margin-bottom:12px;
+.rank.supreme .tag,
+.rank.supreme h3{
+  color:var(--supreme);
 }
 
-.fair-box p{
-  color:var(--muted);
+.rank-price{
+  margin-top:20px;
 
-  font-size:13px;
+  font-size:14px;
 
-  line-height:1.8;
+  color:#dbe8ff;
 }
 
-.fair-list{
-  list-style:none;
+.rank-note{
+  margin-top:8px;
 
-  margin-top:18px;
+  color:#7f91aa;
+
+  font-size:12px;
 }
 
-.fair-list li{
-  padding:10px 0;
-
-  border-bottom:
-    1px solid
-    rgba(120,175,255,.08);
-
-  color:#b9c5d7;
-
-  font-size:13px;
-}
-
-.fair-list li:last-child{
-  border-bottom:0;
-}
-
-.fair-list li:before{
-  content:"✓";
-
-  color:#6ce5ae;
-
-  margin-right:9px;
-}
 
 /* =========================
    STAFF
@@ -924,236 +490,129 @@ section{
 
 .staff{
   border-color:
-    rgba(143,124,255,.18);
+    rgba(143,124,255,.22);
 }
 
 .staff .icon{
   color:#b6aaff;
 
   background:
-    rgba(143,124,255,.09);
+    rgba(143,124,255,.12);
 }
 
+
 /* =========================
-   FAQ
+   SERVER INFO
 ========================= */
 
-.faq{
-  max-width:850px;
+.server-info{
+  display:grid;
 
-  margin:auto;
+  grid-template-columns:
+    repeat(3,1fr);
 
-  display:flex;
+  gap:18px;
 
-  flex-direction:column;
-
-  gap:10px;
+  margin-top:25px;
 }
 
-details{
-  padding:19px 21px;
+.info-box{
+  text-align:center;
 
-  border:
-    1px solid
-    var(--line);
+  padding:24px;
 
-  border-radius:14px;
+  border:1px solid var(--line);
+
+  border-radius:16px;
 
   background:
-    rgba(10,20,37,.62);
+    rgba(255,255,255,.025);
 }
 
-summary{
-  cursor:pointer;
+.info-box strong{
+  display:block;
 
-  list-style:none;
+  margin-bottom:7px;
 
-  font-size:14px;
+  color:#d8e8ff;
+
+  font-size:12px;
+
+  text-transform:uppercase;
+
+  letter-spacing:1px;
+}
+
+.info-box span{
+  color:#fff;
 
   font-weight:800;
+
+  font-size:15px;
 }
 
-summary::-webkit-details-marker{
-  display:none;
-}
-
-details p{
-  color:var(--muted);
-
-  font-size:13px;
-
-  line-height:1.75;
-
-  margin-top:12px;
-}
 
 /* =========================
-   DISCORD CTA
+   CTA
 ========================= */
 
 .cta{
-  position:relative;
-
-  overflow:hidden;
-
   text-align:center;
 
-  padding:
-    70px 20px;
+  border:1px solid var(--line);
 
-  border:
-    1px solid
-    var(--line);
+  border-radius:24px;
 
-  border-radius:25px;
+  padding:55px 20px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(43,105,180,.11),
-      rgba(111,81,220,.08)
+      rgba(43,105,180,.12),
+      rgba(111,81,220,.09)
     );
-
-  box-shadow:
-    0 25px 80px
-    rgba(0,0,0,.18);
-}
-
-.cta:before{
-  content:"";
-
-  position:absolute;
-
-  width:400px;
-  height:400px;
-
-  left:50%;
-  top:-300px;
-
-  transform:translateX(-50%);
-
-  border-radius:50%;
-
-  background:
-    rgba(77,163,255,.09);
-
-  filter:blur(50px);
-
-  pointer-events:none;
-}
-
-.cta h2{
-  position:relative;
-
-  font-size:38px;
-
-  letter-spacing:-1.5px;
 }
 
 .cta p{
-  position:relative;
-
   color:var(--muted);
 
-  max-width:620px;
-
   margin:
-    13px auto
-    26px;
+    12px auto 25px;
 
-  font-size:14px;
+  max-width:600px;
 
-  line-height:1.7;
+  line-height:1.6;
 }
+
 
 /* =========================
    FOOTER
 ========================= */
 
 footer{
-  margin-top:40px;
+  border-top:1px solid var(--line);
 
-  border-top:
-    1px solid
-    var(--line);
+  padding:28px 6%;
 
-  padding:
-    45px 6%;
-
-  color:#718096;
+  color:#74839a;
 
   display:flex;
 
   justify-content:space-between;
 
-  align-items:flex-start;
-
-  gap:30px;
+  gap:20px;
 
   flex-wrap:wrap;
 
-  font-size:12px;
+  font-size:13px;
 }
 
-.footer-brand{
-  max-width:320px;
-}
-
-.footer-logo{
-  color:white;
-
-  font-size:20px;
-
-  font-weight:950;
-
-  margin-bottom:9px;
-}
-
-.footer-logo span{
-  color:var(--blue);
-}
-
-.footer-brand p{
-  color:#718096;
-
-  line-height:1.7;
-}
-
-.footer-links{
-  display:flex;
-
-  flex-direction:column;
-
-  gap:8px;
-}
-
-.footer-links strong{
-  color:#b9c5d7;
-
-  margin-bottom:3px;
-}
-
-.footer-links a:hover{
-  color:white;
-}
-
-.footer-bottom{
-  width:100%;
-
-  padding-top:25px;
-
-  margin-top:10px;
-
-  border-top:
-    1px solid
-    rgba(120,175,255,.08);
-}
 
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:850px){
+@media(max-width:800px){
 
   .navlinks{
     display:none;
@@ -1161,83 +620,37 @@ footer{
 
   .grid,
   .ranks,
-  .about,
-  .gameplay,
-  .fair{
+  .server-info{
     grid-template-columns:1fr;
   }
 
-  .hero{
-    min-height:760px;
-  }
-
   h1{
-    letter-spacing:-4px;
+    letter-spacing:-3px;
   }
-
-  .section-title h2{
-    font-size:31px;
-  }
-
-  .about-main,
-  .about-side{
-    padding:25px;
-  }
-
-}
-
-@media(max-width:500px){
 
   .hero{
-    padding-top:130px;
+    min-height:700px;
   }
-
-  h1{
-    font-size:58px;
-  }
-
-  .hero-subtitle{
-    font-size:15px;
-  }
-
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .cta h2{
-    font-size:30px;
-  }
-
 }
-
 </style>
 </head>
 
 <body>
 
-
 <!-- =========================
-     NAV
+     NAVIGATION
 ========================= -->
 
 <nav class="nav">
 
-  <a href="#" class="logo">
+  <a class="logo" href="#">
     Shift<span>SMP</span>
   </a>
 
   <div class="navlinks">
 
-    <a href="#about">
-      About
-    </a>
-
     <a href="#features">
       Features
-    </a>
-
-    <a href="#gameplay">
-      Gameplay
     </a>
 
     <a href="#ranks">
@@ -1248,16 +661,8 @@ footer{
       Staff
     </a>
 
-    <a href="#faq">
-      FAQ
-    </a>
-
-    <a
-      class="nav-discord"
-      href="https://discord.gg/kF7uWjvNQc"
-      target="_blank"
-    >
-      Discord
+    <a href="#join">
+      Join
     </a>
 
   </div>
@@ -1271,8 +676,6 @@ footer{
 
 <header class="hero">
 
-  <div class="hero-glow"></div>
-
   <div class="hero-content">
 
     <div class="badge">
@@ -1284,14 +687,13 @@ footer{
       <span>ShiftSMP</span>
     </h1>
 
-    <p class="hero-subtitle">
+    <p>
       A community-driven Minecraft SMP built around
-      survival, PvP, freedom and progression.
-      Build your base, explore the world, make alliances,
-      compete with other players and create your own story.
+      survival, PvP, teams, progression and a fair
+      player experience.
     </p>
 
-    <div class="hero-buttons">
+    <div class="buttons">
 
       <a
         class="btn primary"
@@ -1302,15 +704,15 @@ footer{
 
       <a
         class="btn secondary"
-        href="#features"
+        href="#ranks"
       >
-        Explore Server
+        View Ranks
       </a>
 
     </div>
 
-    <div class="server-ip">
-      🎮 YOUR-SERVER-IP
+    <div class="ip">
+      🎮 shiftsmp.shockbyte.xyz
     </div>
 
   </div>
@@ -1319,130 +721,46 @@ footer{
 
 
 <!-- =========================
-     STATUS
+     SERVER INFO
 ========================= -->
 
-<div class="status">
+<section>
 
-  <span class="status-dot"></span>
+  <div class="server-info">
 
-  <span>
-    ShiftSMP
-    <strong>Community Server</strong>
-  </span>
+    <div class="info-box">
 
-  <span>•</span>
+      <strong>
+        Server IP
+      </strong>
 
-  <span>
-    Minecraft Java Edition
-  </span>
-
-</div>
-
-
-<!-- =========================
-     ABOUT
-========================= -->
-
-<section id="about">
-
-  <div class="section-title">
-
-    <h2>
-      Welcome to ShiftSMP
-    </h2>
-
-    <p>
-      Your world. Your decisions. Your story.
-    </p>
-
-  </div>
-
-
-  <div class="about">
-
-    <div class="about-main">
-
-      <h3>
-        Built around the SMP experience.
-      </h3>
-
-      <p>
-        ShiftSMP is a Minecraft survival server created
-        for players who want a world where they can
-        actually make an impact.
-        <br><br>
-        Start with nothing, gather resources, explore
-        the world and build something worth protecting.
-        Team up with friends, create rivalries or simply
-        enjoy survival at your own pace.
-        <br><br>
-        The server focuses on keeping gameplay enjoyable
-        and giving players reasons to keep coming back.
-        Premium ranks are designed around useful
-        quality-of-life and cosmetic perks rather than
-        completely changing the game.
-      </p>
+      <span>
+        shiftsmp.shockbyte.xyz
+      </span>
 
     </div>
 
+    <div class="info-box">
 
-    <div class="about-side">
+      <strong>
+        Join Version
+      </strong>
 
-      <div class="about-point">
+      <span>
+        Minecraft 1.21.6+
+      </span>
 
-        <strong>
-          ⚔ Survival First
-        </strong>
+    </div>
 
-        <span>
-          Progress through Minecraft gameplay and
-          experience the world naturally.
-        </span>
+    <div class="info-box">
 
-      </div>
+      <strong>
+        Server Version
+      </strong>
 
-
-      <div class="about-point">
-
-        <strong>
-          ◆ Player Freedom
-        </strong>
-
-        <span>
-          Build, explore, fight, cooperate or create
-          your own path.
-        </span>
-
-      </div>
-
-
-      <div class="about-point">
-
-        <strong>
-          ◎ Community Focused
-        </strong>
-
-        <span>
-          ShiftSMP is built around its players and
-          the community they create.
-        </span>
-
-      </div>
-
-
-      <div class="about-point">
-
-        <strong>
-          ✦ Always Improving
-        </strong>
-
-        <span>
-          New features, improvements and events can
-          continue to grow the server over time.
-        </span>
-
-      </div>
+      <span>
+        1.21.11
+      </span>
 
     </div>
 
@@ -1460,18 +778,17 @@ footer{
   <div class="section-title">
 
     <h2>
-      What ShiftSMP Offers
+      Why ShiftSMP?
     </h2>
 
     <p>
-      Everything that makes the server worth playing.
+      Everything you need for a long-term SMP experience.
     </p>
 
   </div>
 
 
   <div class="grid">
-
 
     <div class="card">
 
@@ -1480,12 +797,12 @@ footer{
       </div>
 
       <h3>
-        Survival & PvP
+        PvP & Survival
       </h3>
 
       <p>
-        Gather resources, build your base and
-        defend what you create.
+        Explore, fight, build your base and create
+        your own story on the server.
       </p>
 
     </div>
@@ -1498,12 +815,13 @@ footer{
       </div>
 
       <h3>
-        Fair Progression
+        Balanced Ranks
       </h3>
 
       <p>
-        Gameplay remains the main way to progress.
-        Ranks don't replace the survival experience.
+        Rank perks focus on convenience, cosmetics
+        and progression without turning the server
+        into an excessive pay-to-win experience.
       </p>
 
     </div>
@@ -1516,120 +834,12 @@ footer{
       </div>
 
       <h3>
-        Community
+        Active Community
       </h3>
 
       <p>
-        Meet players, make friends, form teams and
-        become part of the ShiftSMP community.
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="icon">
-        ⌂
-      </div>
-
-      <h3>
-        Build Anything
-      </h3>
-
-      <p>
-        From small starter bases to massive
-        projects, your creativity controls the world.
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="icon">
-        ◇
-      </div>
-
-      <h3>
-        Player Freedom
-      </h3>
-
-      <p>
-        There isn't one correct way to play.
-        Create your own goals and playstyle.
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="icon">
-        ✦
-      </div>
-
-      <h3>
-        Server Events
-      </h3>
-
-      <p>
-        Special activities and custom server events
-        give the community something new to experience.
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="icon">
-        ◈
-      </div>
-
-      <h3>
-        Custom Features
-      </h3>
-
-      <p>
-        ShiftSMP includes custom server systems
-        designed specifically for the community.
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="icon">
-        ⚡
-      </div>
-
-      <h3>
-        Active Development
-      </h3>
-
-      <p>
-        The server continues to evolve with new
-        ideas, improvements and community feedback.
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="icon">
-        ♢
-      </div>
-
-      <h3>
-        Long-Term SMP
-      </h3>
-
-      <p>
-        Build something that lasts and become part
-        of the server's history.
+        Play with friends, create teams, build your
+        base and become part of the ShiftSMP community.
       </p>
 
     </div>
@@ -1640,95 +850,164 @@ footer{
 
 
 <!-- =========================
-     GAMEPLAY
+     RANKS
 ========================= -->
 
-<section id="gameplay">
+<section id="ranks">
 
   <div class="section-title">
 
     <h2>
-      How ShiftSMP Works
+      Player Ranks
     </h2>
 
     <p>
-      Start small. Build bigger. Make your mark.
+      Useful perks without ruining survival gameplay.
     </p>
 
   </div>
 
 
-  <div class="gameplay">
+  <div class="grid ranks">
 
 
-    <div class="card gameplay-card">
+    <!-- ELITE -->
 
-      <div class="gameplay-number">
-        01 / START
+    <div class="card rank elite">
+
+      <div class="tag">
+        Premium
       </div>
 
       <h3>
-        Begin Your Journey
+        ELITE
       </h3>
 
-      <p>
-        Enter the world, gather your first resources
-        and decide where you want to settle.
-      </p>
+      <ul>
+
+        <li>
+          Elite rank prefix
+        </li>
+
+        <li>
+          1 home
+        </li>
+
+        <li>
+          2× player scale
+        </li>
+
+        <li>
+          Elite TAB styling
+        </li>
+
+        <li>
+          Cosmetic perks
+        </li>
+
+        <li>
+          Rank-exclusive features
+        </li>
+
+      </ul>
+
+      <div class="rank-note">
+        Designed for quality-of-life
+      </div>
 
     </div>
 
 
-    <div class="card gameplay-card">
+    <!-- MASTER -->
 
-      <div class="gameplay-number">
-        02 / BUILD
+    <div class="card rank master">
+
+      <div class="tag">
+        Premium+
       </div>
 
       <h3>
-        Create Your Base
+        MASTER
       </h3>
 
-      <p>
-        Build a home, establish your territory and
-        create something that represents you.
-      </p>
+      <ul>
+
+        <li>
+          Everything in Elite
+        </li>
+
+        <li>
+          1 home
+        </li>
+
+        <li>
+          3× player scale
+        </li>
+
+        <li>
+          Master rank prefix
+        </li>
+
+        <li>
+          More cosmetic perks
+        </li>
+
+        <li>
+          Additional convenience features
+        </li>
+
+      </ul>
+
+      <div class="rank-note">
+        More customization, still balanced
+      </div>
 
     </div>
 
 
-    <div class="card gameplay-card">
+    <!-- SUPREME -->
 
-      <div class="gameplay-number">
-        03 / EXPLORE
+    <div class="card rank supreme">
+
+      <div class="tag">
+        Top Player
       </div>
 
       <h3>
-        Explore the World
+        SUPREME
       </h3>
 
-      <p>
-        Travel beyond your base, discover new areas
-        and collect the resources you need.
-      </p>
+      <ul>
 
-    </div>
+        <li>
+          Everything in Master
+        </li>
 
+        <li>
+          1 home
+        </li>
 
-    <div class="card gameplay-card">
+        <li>
+          5× player scale
+        </li>
 
-      <div class="gameplay-number">
-        04 / COMPETE
+        <li>
+          Supreme rank prefix
+        </li>
+
+        <li>
+          Extra cosmetic perks
+        </li>
+
+        <li>
+          Additional convenience features
+        </li>
+
+      </ul>
+
+      <div class="rank-note">
+        The highest player rank
       </div>
-
-      <h3>
-        Make Your Mark
-      </h3>
-
-      <p>
-        Team up, compete, defend your builds and
-        become known throughout the community.
-      </p>
 
     </div>
 
@@ -1756,264 +1035,59 @@ footer{
   </div>
 
 
-  <div class="fair">
+  <div class="grid">
 
+    <div class="card">
 
-    <div class="fair-box">
+      <div class="icon">
+        ✓
+      </div>
 
       <h3>
-        Our Approach
+        One Home For Everyone
       </h3>
 
       <p>
-        ShiftSMP ranks are designed to add convenience,
-        cosmetics and extra quality-of-life features
-        without making normal players feel completely
-        outmatched.
+        Every player gets access to a single home.
+        Ranks don't get unlimited teleport locations.
       </p>
-
-      <ul class="fair-list">
-
-        <li>
-          No monthly subscriptions
-        </li>
-
-        <li>
-          One-time rank purchases
-        </li>
-
-        <li>
-          Quality-of-life focused perks
-        </li>
-
-        <li>
-          Cosmetic features
-        </li>
-
-      </ul>
 
     </div>
 
 
-    <div class="fair-box">
+    <div class="card">
+
+      <div class="icon">
+        ◆
+      </div>
 
       <h3>
-        Play Your Way
+        Quality of Life
       </h3>
 
       <p>
-        You don't need a premium rank to enjoy ShiftSMP.
-        Every player can participate in the core survival
-        experience.
+        Premium ranks focus on customization and
+        convenience rather than overwhelming gameplay
+        advantages.
       </p>
 
-      <ul class="fair-list">
-
-        <li>
-          Survival remains the core gameplay
-        </li>
-
-        <li>
-          Build and explore normally
-        </li>
-
-        <li>
-          Play with friends
-        </li>
-
-        <li>
-          Create your own goals
-        </li>
-
-      </ul>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     RANKS
-========================= -->
-
-<section id="ranks">
-
-  <div class="section-title">
-
-    <h2>
-      Player Ranks
-    </h2>
-
-    <p>
-      One-time purchases. No monthly payments.
-    </p>
-
-  </div>
-
-
-  <div class="grid ranks">
-
-
-    <!-- ELITE -->
-
-    <div class="card rank">
-
-      <div class="tag">
-        Player Rank
-      </div>
-
-      <h3>
-        ELITE
-      </h3>
-
-      <div class="price">
-        Rp15K
-        <small>
-          One-time purchase
-        </small>
-      </div>
-
-      <ul>
-
-        <li>
-          Hat command
-        </li>
-
-        <li>
-          Workbench access
-        </li>
-
-        <li>
-          Ender Chest access
-        </li>
-
-        <li>
-          Cosmetic perks
-        </li>
-
-        <li>
-          Elite prefix
-        </li>
-
-      </ul>
-
-      <a
-        class="btn buy"
-        href="https://discord.gg/kF7uWjvNQc"
-        target="_blank"
-      >
-        Get Elite
-      </a>
-
     </div>
 
 
-    <!-- MASTER -->
+    <div class="card">
 
-    <div class="card rank featured">
-
-      <div class="tag">
-        Most Popular
+      <div class="icon">
+        ⚔
       </div>
 
       <h3>
-        MASTER
+        Survival First
       </h3>
 
-      <div class="price">
-        Rp30K
-        <small>
-          One-time purchase
-        </small>
-      </div>
-
-      <ul>
-
-        <li>
-          Everything in Elite
-        </li>
-
-        <li>
-          Nickname command
-        </li>
-
-        <li>
-          More cosmetic perks
-        </li>
-
-        <li>
-          Master prefix
-        </li>
-
-        <li>
-          Extra quality-of-life perks
-        </li>
-
-      </ul>
-
-      <a
-        class="btn buy"
-        href="https://discord.gg/kF7uWjvNQc"
-        target="_blank"
-      >
-        Get Master
-      </a>
-
-    </div>
-
-
-    <!-- SUPREME -->
-
-    <div class="card rank">
-
-      <div class="tag">
-        Top Player Rank
-      </div>
-
-      <h3>
-        SUPREME
-      </h3>
-
-      <div class="price">
-        Rp50K
-        <small>
-          One-time purchase
-        </small>
-      </div>
-
-      <ul>
-
-        <li>
-          Everything in Master
-        </li>
-
-        <li>
-          Anvil access
-        </li>
-
-        <li>
-          Extra cosmetic perks
-        </li>
-
-        <li>
-          Exclusive cosmetics
-        </li>
-
-        <li>
-          Supreme prefix
-        </li>
-
-      </ul>
-
-      <a
-        class="btn buy"
-        href="https://discord.gg/kF7uWjvNQc"
-        target="_blank"
-      >
-        Get Supreme
-      </a>
+      <p>
+        The core survival experience remains available
+        to everyone, whether they own a rank or not.
+      </p>
 
     </div>
 
@@ -2031,11 +1105,11 @@ footer{
   <div class="section-title">
 
     <h2>
-      The ShiftSMP Team
+      Server Staff
     </h2>
 
     <p>
-      The people keeping the server running.
+      The team keeping ShiftSMP running.
     </p>
 
   </div>
@@ -2055,8 +1129,8 @@ footer{
       </h3>
 
       <p>
-        Helps keep the community fair, handles
-        player reports and assists players.
+        Helps moderate the community, handle
+        player issues and keep the server fair.
       </p>
 
     </div>
@@ -2073,8 +1147,8 @@ footer{
       </h3>
 
       <p>
-        Oversees server operations, staff coordination
-        and the overall player experience.
+        Handles server management, staff coordination
+        and day-to-day operations.
       </p>
 
     </div>
@@ -2091,7 +1165,7 @@ footer{
       </h3>
 
       <p>
-        Leads ShiftSMP, manages development and
+        Runs ShiftSMP, manages development and
         works on the future of the server.
       </p>
 
@@ -2103,113 +1177,42 @@ footer{
 
 
 <!-- =========================
-     FAQ
+     MEDIA
 ========================= -->
 
-<section id="faq">
+<section>
 
   <div class="section-title">
 
     <h2>
-      Frequently Asked Questions
+      Media
     </h2>
 
     <p>
-      Need to know something before joining?
+      Content creators are part of the ShiftSMP community.
     </p>
 
   </div>
 
 
-  <div class="faq">
+  <div class="grid">
 
+    <div class="card">
 
-    <details>
+      <div class="icon">
+        ▶
+      </div>
 
-      <summary>
-        What version is ShiftSMP?
-      </summary>
-
-      <p>
-        ShiftSMP is built for Minecraft Java Edition.
-        Check the Discord for the current supported
-        server version.
-      </p>
-
-    </details>
-
-
-    <details>
-
-      <summary>
-        Do I need a rank to play?
-      </summary>
+      <h3>
+        Media Rank
+      </h3>
 
       <p>
-        No. Everyone can play the core ShiftSMP
-        survival experience without purchasing a rank.
+        A dedicated rank for approved content creators.
+        Media is a community rank and is not a staff position.
       </p>
 
-    </details>
-
-
-    <details>
-
-      <summary>
-        Are the ranks monthly?
-      </summary>
-
-      <p>
-        No. Elite, Master and Supreme are one-time
-        purchases rather than monthly subscriptions.
-      </p>
-
-    </details>
-
-
-    <details>
-
-      <summary>
-        Are the ranks pay-to-win?
-      </summary>
-
-      <p>
-        The ranks are designed primarily around
-        quality-of-life and cosmetic perks rather
-        than giving players overwhelming gameplay
-        advantages.
-      </p>
-
-    </details>
-
-
-    <details>
-
-      <summary>
-        Where can I get a rank?
-      </summary>
-
-      <p>
-        Rank purchases and information are handled
-        through the official ShiftSMP Discord.
-      </p>
-
-    </details>
-
-
-    <details>
-
-      <summary>
-        How do I join the community?
-      </summary>
-
-      <p>
-        Join the ShiftSMP Discord using the button
-        below. You'll find server information,
-        announcements and community updates there.
-      </p>
-
-    </details>
+    </div>
 
   </div>
 
@@ -2229,17 +1232,17 @@ footer{
     </h2>
 
     <p>
-      Start your adventure, meet the community and
-      create your own story. Join the Discord to get
-      the latest server information.
+      Join Minecraft 1.21.6 or newer and start
+      your survival journey on ShiftSMP.
     </p>
 
-    <div class="hero-buttons">
+    <div class="buttons">
 
       <a
         class="btn primary"
-        href="https://discord.gg/kF7uWjvNQc"
+        href="https://discord.gg/4A25tQDkMJ"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Join Discord
       </a>
@@ -2276,71 +1279,13 @@ footer{
 
 <footer>
 
-  <div class="footer-brand">
-
-    <div class="footer-logo">
-      Shift<span>SMP</span>
-    </div>
-
-    <p>
-      A community Minecraft SMP focused on survival,
-      PvP, freedom and a fair player experience.
-    </p>
-
-  </div>
-
-
-  <div class="footer-links">
-
-    <strong>
-      Navigation
-    </strong>
-
-    <a href="#about">
-      About
-    </a>
-
-    <a href="#features">
-      Features
-    </a>
-
-    <a href="#ranks">
-      Ranks
-    </a>
-
-    <a href="#faq">
-      FAQ
-    </a>
-
-  </div>
-
-
-  <div class="footer-links">
-
-    <strong>
-      Community
-    </strong>
-
-    <a
-      href="https://discord.gg/kF7uWjvNQc"
-      target="_blank"
-    >
-      Discord
-    </a>
-
-    <a href="#join">
-      Join ShiftSMP
-    </a>
-
-  </div>
-
-
-  <div class="footer-bottom">
-
+  <span>
     © 2026 ShiftSMP. All rights reserved.
-    Minecraft is a trademark of Mojang Studios.
+  </span>
 
-  </div>
+  <span>
+    Minecraft is a trademark of Mojang Studios.
+  </span>
 
 </footer>
 
@@ -2349,21 +1294,23 @@ footer{
 
 function copyIP(){
 
-  const ip = "YOUR-SERVER-IP";
+  const ip =
+    "shiftsmp.shockbyte.xyz";
 
-  navigator.clipboard.writeText(ip)
+  navigator.clipboard
+    .writeText(ip)
     .then(() => {
 
-      const message =
+      const copied =
         document.getElementById("copied");
 
-      message.style.display = "block";
+      copied.style.display = "block";
 
       setTimeout(() => {
 
-        message.style.display = "none";
+        copied.style.display = "none";
 
-      },1800);
+      }, 1800);
 
     });
 
@@ -2373,4 +1320,3 @@ function copyIP(){
 
 </body>
 </html>
-```
